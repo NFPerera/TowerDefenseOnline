@@ -8,9 +8,6 @@ namespace _Main.Scripts.BaseGame._Managers
     public class BuildManager : MonoBehaviour
     {
         public static BuildManager Instance;
-        [SerializeField] private SpawnableNetworkObject areaTowerPrefab;
-        [SerializeField] private SpawnableNetworkObject rangeTowerPrefab;
-        [SerializeField] private SpawnableNetworkObject rocketTowerPrefab;
 
         private SpawnableNetworkObject m_towerToBuild;
         private MousePosition m_mousePosition;
@@ -36,14 +33,5 @@ namespace _Main.Scripts.BaseGame._Managers
             
             m_towerToBuild = null;
         }
-
-
-
-        public SpawnableNetworkObject GetAreaTowerPrefab() => areaTowerPrefab;
-        public SpawnableNetworkObject GetRangeTowerPrefab() => rangeTowerPrefab;
-        public SpawnableNetworkObject GetRocketTowerPrefab() => rocketTowerPrefab;
-        
-        
-
     }
 }

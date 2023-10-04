@@ -25,7 +25,6 @@ namespace _Main.Scripts.BaseGame.Controllers
         private bool m_isWaveActive;
         
         [SerializeField] private Transform spawnPoint;
-        [SerializeField] private Button waveButton;
 
 
         private UIManager m_ui;
@@ -74,7 +73,6 @@ namespace _Main.Scripts.BaseGame.Controllers
 
             if (m_spawnedEnemies > waves[m_nextWave].numberOfEnemies)
             {
-                waveButton.interactable = true;
                 m_nextWave++;
                 m_isWaveActive = false;
             }
@@ -96,7 +94,6 @@ namespace _Main.Scripts.BaseGame.Controllers
 
             if (m_spawnedEnemies > waves[m_nextWave].numberOfEnemies)
             {
-                waveButton.interactable = true;
                 m_nextWave++;
                 m_isWaveActive = false;
             }

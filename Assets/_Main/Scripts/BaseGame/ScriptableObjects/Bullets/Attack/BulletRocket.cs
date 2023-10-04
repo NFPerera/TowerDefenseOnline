@@ -4,7 +4,7 @@ using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.BaseGame.Models;
 using UnityEngine;
 
-namespace Bullets.Attack
+namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
 {
     [CreateAssetMenu(fileName = "BulletRocket", menuName = "_main/Bullet/Data/Attack/RocketBulletAttack", order = 0)]
     public class BulletRocket : BulletAttack

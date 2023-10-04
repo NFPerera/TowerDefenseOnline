@@ -19,18 +19,12 @@ namespace _Main.Scripts.Menus
         [SerializeField] private Button hostButton;
         [SerializeField] private Button serverButton;
         [SerializeField] private Button clientButton;
-        [SerializeField] private TMP_InputField inputFieldName;
     
-        [Header("CharacterSelection")] 
-        [SerializeField] private GameObject charSelectionObject;
 
         [Header("RoomSetting")]
         [SerializeField] private GameObject waitingRoomGameObject;
-        [SerializeField] private RoomManager roomManager;
         [SerializeField] private GameObject startGameButton;
         
-        [SerializeField] private int maxPlayers;
-        [SerializeField] private string playersName;
         
         
         
@@ -55,33 +49,27 @@ namespace _Main.Scripts.Menus
 
         public void OnHostEventHandler()
         {
-            NetworkManager.Singleton.OnServerStarted += OnCharSelectionEnable;
+            NetworkManager.Singleton.OnServerStarted += OnWaitingRoomEnable;
             controller.OnHost();
             SetInteractableButtons(false);
         }
 
         public void OnServerEventHandler()
         {
-            NetworkManager.Singleton.OnServerStarted += OnCharSelectionEnable;
+            NetworkManager.Singleton.OnServerStarted += OnWaitingRoomEnable;
             controller.OnServer();
             SetInteractableButtons(false);
         }
 
         public void OnClientEventHandler()
         {
-            NetworkManager.Singleton.OnClientStarted += OnCharSelectionEnable;
+            NetworkManager.Singleton.OnClientStarted += OnWaitingRoomEnable;
             controller.OnClient();
             SetInteractableButtons(false);
         }
 
-        public void OnLeaveRoomButtonClicked()
-        {
-            
-            //NetworkManager.Singleton.DisconnectClient();
-        }
         public void OnStartGameButtonClicked()
         {
-            
             controller.ChangeNetScene(sceneToLoad);
         }
 
@@ -103,11 +91,7 @@ namespace _Main.Scripts.Menus
 #endregion
         
 
-        public void OnChangeUserName()
-        {
-            playersName = inputFieldName.text;
-            //GameManager.Instance.SetPlayersName(playersName);
-        }
+        
 
         public void OnCharacterSelection(int charId)
         {
@@ -134,20 +118,13 @@ namespace _Main.Scripts.Menus
         private void OnMainMenuEnable()
         {
             mainMenuObj.SetActive(true);
-            charSelectionObject.SetActive(false);
             waitingRoomGameObject.SetActive(false);
         }
-        private void OnCharSelectionEnable()
-        {
-            mainMenuObj.SetActive(false);
-            charSelectionObject.SetActive(true);
-            waitingRoomGameObject.SetActive(false);
-        }
+        
 
         private void OnWaitingRoomEnable()
         {
             mainMenuObj.SetActive(false);
-            charSelectionObject.SetActive(false);
             waitingRoomGameObject.SetActive(true);
             var manager = NetworkManager.Singleton;
             startGameButton.SetActive(manager.IsHost || manager.IsServer);

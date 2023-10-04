@@ -3,7 +3,7 @@ using _Main.Scripts.BaseGame.Commands;
 using _Main.Scripts.BaseGame.Models;
 using UnityEngine;
 
-namespace Bullets.Movement
+namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Movement
 {
     [CreateAssetMenu(fileName = "BasicBulletMovement", menuName = "_main/Bullet/Data/Movement/BasicBulletMovement", order = 0)]
     public class BasicBulletMovement : BulletMovement

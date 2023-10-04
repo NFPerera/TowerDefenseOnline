@@ -17,7 +17,6 @@ namespace _Main.Scripts.BaseGame._Managers
         [SerializeField] private Button areaButton;
         [SerializeField] private Button rangeButton;
         [SerializeField] private Button rocketButton;
-        [SerializeField] private Button undoButton;
 
         [Header("Texts")] 
         [SerializeField] private TextMeshProUGUI lifeText;
@@ -41,21 +40,16 @@ namespace _Main.Scripts.BaseGame._Managers
 
             lifeText.text = GameManager.Instance.GetLifePoints().ToString();
             moneyText.text = GameManager.Instance.GetMoney().ToString();
+            GameManager.Instance.OnChangeMoney += CheckButtonInteractions;
+            
         }
 
-
-        private void Update()
-        {
-            CheckButtonInteractions(GameManager.Instance.GetMoney());
-        }
 
         private void CheckButtonInteractions(int money)
         {
             areaButton.interactable = areaTowerData.Cost <= money;
             rangeButton.interactable = rangeTowerData.Cost <= money;
             rocketButton.interactable = rocketTowerData.Cost <= money;
-            
-            undoButton.interactable = GameManager.Instance.GetSellableEvents().Count > 0;
         }
 
         public void OnUndoButtonEvent() => GameManager.Instance.SellLastTower();

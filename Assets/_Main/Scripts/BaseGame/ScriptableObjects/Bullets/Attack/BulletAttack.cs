@@ -1,7 +1,7 @@
 ﻿using _Main.Scripts.BaseGame.Models;
 using UnityEngine;
 
-namespace Bullets.Attack
+namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
 {
     public abstract class BulletAttack : ScriptableObject
     {

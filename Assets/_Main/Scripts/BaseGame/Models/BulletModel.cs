@@ -2,8 +2,8 @@
 using _Main.Scripts.BaseGame.Commands;
 using _Main.Scripts.BaseGame.Interfaces.BulletsInterfaces;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
+using _Main.Scripts.BaseGame.ScriptableObjects.Bullets;
 using _Main.Scripts.Networking;
-using Bullets;
 using Clases;
 using UnityEngine;
 

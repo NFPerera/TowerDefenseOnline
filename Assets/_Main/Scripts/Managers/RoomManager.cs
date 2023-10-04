@@ -24,8 +24,6 @@ namespace _Main.Scripts.Managers
             }
         }
         [SerializeField] private List<PlayerAvatarController> playersAvatars;
-        //[SerializeField] private List<TMP_Text> playersNamesObj;
-        //[SerializeField] private List<Texture> avatarPictures;
         private NetworkVariable<int> m_currPlayersInRoom = new NetworkVariable<int>();
         
         
