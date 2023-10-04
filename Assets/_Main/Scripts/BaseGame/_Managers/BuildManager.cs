@@ -11,11 +11,12 @@ namespace _Main.Scripts.BaseGame._Managers
 
         private SpawnableNetworkObject m_towerToBuild;
         private MousePosition m_mousePosition;
-        private void Awake()
+        private void Start()
         {
             if(Instance != null) Destroy(this);
                 Instance = this;
 
+                //TODO: Refactorizar todo lo del mouse con el nuevo input sisteem
             m_mousePosition = GameObject.FindGameObjectWithTag("Mouse").GetComponent<MousePosition>();
             GameManager.Instance.OnClick += BuildTowerInWorld;
         }

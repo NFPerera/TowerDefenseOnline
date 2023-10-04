@@ -22,6 +22,8 @@ namespace _Main.Scripts.BaseGame._Managers
         [SerializeField] private TextMeshProUGUI lifeText;
         [SerializeField] private TextMeshProUGUI moneyText;
         
+        
+        //TODO: Cambiar screens por escenas distintas
         [Header("Screens")]
         [SerializeField] private GameObject gameOverScreen;
         [SerializeField] private GameObject youWonText;
@@ -29,7 +31,7 @@ namespace _Main.Scripts.BaseGame._Managers
 
         private bool _toggle;
 
-        private void Awake()
+        private void Start()
         {
             gameOverScreen.SetActive(false);
             youWonText.SetActive(false);

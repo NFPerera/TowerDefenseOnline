@@ -1,4 +1,6 @@
-﻿using _Main.Scripts.Managers;
+﻿using System.Runtime.CompilerServices;
+using _Main.Scripts.BaseGame._Managers;
+using _Main.Scripts.Managers;
 using _Main.Scripts.Networking;
 using TMPro;
 using Unity.Netcode;
@@ -19,12 +21,12 @@ namespace _Main.Scripts.Menus
         [SerializeField] private Button hostButton;
         [SerializeField] private Button serverButton;
         [SerializeField] private Button clientButton;
-    
+        [SerializeField] private TMP_InputField inputFieldName;
 
         [Header("RoomSetting")]
         [SerializeField] private GameObject waitingRoomGameObject;
         [SerializeField] private GameObject startGameButton;
-        
+        [SerializeField] private string playersName = "Carlitos"; 
         
         
         
@@ -91,7 +93,12 @@ namespace _Main.Scripts.Menus
 #endregion
         
 
-        
+        public void OnChangeUserName()
+        {
+            playersName = inputFieldName.text;
+            var id = NetworkManager.Singleton.LocalClientId;
+            MasterManager.Instance.SetPlayersNameServerRpc(id, playersName);
+        }
 
         public void OnCharacterSelection(int charId)
         {

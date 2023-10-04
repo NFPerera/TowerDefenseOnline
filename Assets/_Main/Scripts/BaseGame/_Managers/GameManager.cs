@@ -28,7 +28,7 @@ namespace _Main.Scripts.BaseGame._Managers
         public Action OnGameOver;
 
         private const int MaxUndos = 25;
-
+        private string m_playersName;
 
         private UIManager m_ui;
 
@@ -68,6 +68,7 @@ namespace _Main.Scripts.BaseGame._Managers
             }
         }
 
+        
         #region Facade
 
             public void AddEventQueue(ICommando commando) => m_events.Add(commando);
