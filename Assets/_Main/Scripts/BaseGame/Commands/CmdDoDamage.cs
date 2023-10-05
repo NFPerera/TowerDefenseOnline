@@ -5,16 +5,16 @@ namespace _Main.Scripts.BaseGame.Commands
 {
     public class CmdDoDamage : ICommando
     {
-        private int _damage;
-        private IDamageable _healthController;
+        private int m_damage;
+        private IDamageable m_healthController;
         
         public CmdDoDamage(IDamageable healthController, int damage)
         {
-            _healthController = healthController;
-            _damage = damage;
+            m_healthController = healthController;
+            m_damage = damage;
         }
 
-        public void Execute() => _healthController.DoDamage(_damage);
-        public void Undo() => _healthController.Heal(_damage);
+        public void Execute() => m_healthController.DoDamage(m_damage);
+        public void Undo() => m_healthController.Heal(m_damage);
     }
 }
