@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.BaseGame.Interfaces.TowerInterfaces;
+using _Main.Scripts.BaseGame.ScriptableObjects.Towers;
 using _Main.Scripts.Networking;
-using Towers;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.Models

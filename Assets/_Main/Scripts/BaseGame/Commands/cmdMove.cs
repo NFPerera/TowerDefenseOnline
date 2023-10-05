@@ -1,5 +1,6 @@
 ﻿using _Main.Scripts.BaseGame.Clases;
 using _Main.Scripts.BaseGame.Interfaces;
+using _Main.Scripts.Networking;
 using Clases;
 using UnityEngine;
 
@@ -7,16 +8,25 @@ namespace _Main.Scripts.BaseGame.Commands
 {
     public class CmdMove : ICommando
     {
-        private MovementController _movementController;
-        private Vector3 _direction;
+        private ulong m_ownerId;
+        private ulong m_id;
+        private Vector3 m_direction;
+        private float m_speed;
         
-        public CmdMove(MovementController movementController, Vector3 direction)
+        public CmdMove(ulong p_ownerId, ulong p_objId, Vector3 direction, float p_speed)
         {
-            _movementController = movementController;
-            _direction = direction;
+            m_ownerId = p_ownerId;
+            m_id = p_objId;
+            m_direction = direction;
+            m_speed = p_speed;
         }
 
-        public void Execute() => _movementController.Move(_direction);
-        public void Undo() => _movementController.MoveBackwards(_direction);
+        public void Execute()
+        {
+            MasterManager.Instance.RequestMoveCommandServerRpc(m_ownerId,m_id, m_direction, m_speed);
+        }
+        public void Undo()
+        { 
+        }
     }
 }

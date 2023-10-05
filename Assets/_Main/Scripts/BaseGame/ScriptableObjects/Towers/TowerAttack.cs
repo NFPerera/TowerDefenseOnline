@@ -1,7 +1,7 @@
 ﻿using _Main.Scripts.BaseGame.Models;
 using UnityEngine;
 
-namespace Towers
+namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
 {
     public abstract class TowerAttack : ScriptableObject
     {

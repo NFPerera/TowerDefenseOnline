@@ -5,6 +5,7 @@ using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.Networking;
 using Clases;
 using Enemies;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.Models
@@ -21,7 +22,7 @@ namespace _Main.Scripts.BaseGame.Models
         private List<Transform> m_pathPoints;
         private float m_speed;
         private int m_indexPathPoints;
-
+        private int m_currLife;
         private void Awake()
         {
             m_pathPoints = GameManager.Instance.PathPoints;
@@ -62,6 +63,7 @@ namespace _Main.Scripts.BaseGame.Models
         #region IDamageable
 
             public Transform GetTransform() => transform;
+            public ulong GetObjId() => NetworkObjectId;
 
             public void DoDamage(int damage)
             {
@@ -90,12 +92,18 @@ namespace _Main.Scripts.BaseGame.Models
         private void ChangeStats()
         {
             m_healthController = new HealthController(data.enemiesTierDatas[index].MaxHealth);
+            m_currLife = data.enemiesTierDatas[index].MaxHealth;
             m_sprite.sprite = data.enemiesTierDatas[index].Sprite;
         }
         private void OnDie()
         {
             GameManager.Instance.OnChangeMoney.Invoke(10);
             Destroy(gameObject);
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref m_currLife);
         }
     }
 }

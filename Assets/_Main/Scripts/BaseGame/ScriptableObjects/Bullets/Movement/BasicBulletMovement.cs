@@ -14,7 +14,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Movement
             Vector3 modelPosition = model.transform.position;
             var direction = (targetPosition - modelPosition).normalized;
             
-            var cmdMove = new CmdMove(model.GetMovementController(), direction);
+            var cmdMove = new CmdMove(model.OwnerId,model.GetNetworkId(), direction, model.GetData().Speed);
             
             GameManager.Instance.AddEventQueue(cmdMove);
         }

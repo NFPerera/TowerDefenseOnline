@@ -1,20 +1,23 @@
 ﻿using _Main.Scripts.BaseGame.Interfaces;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
+using _Main.Scripts.Networking;
 
 namespace _Main.Scripts.BaseGame.Commands
 {
     public class CmdDoDamage : ICommando
     {
         private int m_damage;
-        private IDamageable m_healthController;
+        private ulong m_objId;
         
-        public CmdDoDamage(IDamageable healthController, int damage)
+        public CmdDoDamage(ulong objId, int damage)
         {
-            m_healthController = healthController;
+            m_objId = objId;
             m_damage = damage;
         }
 
-        public void Execute() => m_healthController.DoDamage(m_damage);
-        public void Undo() => m_healthController.Heal(m_damage);
+        public void Execute() => MasterManager.Instance.RequestDoDamageServerRpc(m_objId, m_damage);
+        
+
+        public void Undo() => MasterManager.Instance.RequestDoHealServerRpc(m_objId, m_damage);
     }
 }

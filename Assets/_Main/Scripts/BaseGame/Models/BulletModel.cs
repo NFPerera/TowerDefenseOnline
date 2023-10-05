@@ -5,6 +5,7 @@ using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.BaseGame.ScriptableObjects.Bullets;
 using _Main.Scripts.Networking;
 using Clases;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.Models
@@ -14,31 +15,31 @@ namespace _Main.Scripts.BaseGame.Models
     {
         [SerializeField] private BulletData data;
 
-        private Transform _target;
-        private IDamageable _targetDamageable;
-        private MovementController _movementController;
-        private CmdMove _cmdMove;
-        private int _damage;
-        private bool _reachTarget;
+        private Transform m_target;
+        private IDamageable m_targetDamageable;
+        private ulong m_targetDamageableId;
+        private CmdMove m_cmdMove;
+        private int m_damage;
+        private bool m_reachTarget;
+        private ulong m_objId;
 
         public BulletData GetData() => data;
         public void InitializeBullet(Transform target, int damage)
         {
-            _damage = damage;
-            _target = target;
-            _reachTarget = false;
+            m_damage = damage;
+            m_target = target;
+            m_reachTarget = false;
 
-            _movementController = gameObject.GetComponent<MovementController>();
-            _movementController.SetSpeed(data.Speed);
 
-            var dir = (_target.position - transform.position).normalized;
-            _cmdMove = new CmdMove(_movementController, dir);
+            var dir = (m_target.position - transform.position).normalized;
+            m_objId = NetworkObjectId;
+            m_cmdMove = new CmdMove(OwnerId,m_objId, dir,data.Speed);
         }
         private void Update()
         {
-            if (!_reachTarget && _target != null)
+            if (!m_reachTarget && m_target != null)
             {
-                _cmdMove.Execute();
+                m_cmdMove.Execute();
                 //GameManager.Instance.AddEventQueue(_cmdMove);
             }
             else Destroy(gameObject);
@@ -46,23 +47,29 @@ namespace _Main.Scripts.BaseGame.Models
 
         private void OnTriggerEnter2D(Collider2D col)
         {
+            if(!IsServer)
+                return;
+            
             if (!col.TryGetComponent(out IDamageable damageable)) return;
 
-            if (!_reachTarget)
+            if (!m_reachTarget)
             {
                 SetTargetDamageable(damageable);
+                SetTargetDamageableId(col.GetComponent<NetworkObject>().NetworkObjectId);
                 data.BulletAttack.Attack(this);
-                _reachTarget = true;
+                m_reachTarget = true;
             }
         }
 
-        private void SetTargetDamageable(IDamageable target) => _targetDamageable = target;
+        private void SetTargetDamageable(IDamageable target) => m_targetDamageable = target;
+        private void SetTargetDamageableId(ulong targetId) => m_targetDamageableId = targetId;
 
         #region Getters
-            public IDamageable GetTargetIDamageable() => _targetDamageable;
-            public Transform GetTargetTransform() => _target;
-            public int GetDamage() => _damage;
-            public MovementController GetMovementController() => _movementController;
+            public IDamageable GetTargetIDamageable() => m_targetDamageable;
+            public ulong GetTargetID() => m_targetDamageableId;
+            public Transform GetTargetTransform() => m_target;
+            public int GetDamage() => m_damage;
+            public ulong GetNetworkId() => m_objId;
 
         #endregion
         

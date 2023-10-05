@@ -8,5 +8,7 @@ namespace _Main.Scripts.Networking
         [SerializeField] private int spawnObjectId;
 
         public int SpawnObjectId => spawnObjectId;
+        public ulong OwnerId { get; private set; }
+        public void SetOwnerId(ulong p_ownerId) => OwnerId = p_ownerId;
     }
 }

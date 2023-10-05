@@ -1,5 +1,5 @@
-﻿using TMPro;
-using Towers;
+﻿using _Main.Scripts.BaseGame.ScriptableObjects.Towers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

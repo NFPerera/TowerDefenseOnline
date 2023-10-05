@@ -3,7 +3,7 @@ using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.BaseGame.Models;
 using UnityEngine;
 
-namespace Towers
+namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
 {
     [CreateAssetMenu(fileName = "AttackInRange", menuName = "_main/Tower/Attack/Range", order = 0)]
     public class AttackInRange : TowerAttack

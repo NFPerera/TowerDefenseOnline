@@ -2,7 +2,7 @@
 using _Main.Scripts.BaseGame.Models;
 using UnityEngine;
 
-namespace Towers
+namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
 {
     public enum AttackSpeed
     {

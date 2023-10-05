@@ -31,5 +31,20 @@ namespace _Main.Scripts
 
         public void AddObjectToOwnerList(NetworkObject o) => m_ownedObjects.Add(o);
         public void RemoveObjectToOwnerList(NetworkObject o) => m_ownedObjects.Remove(o);
+
+        public bool TryGetOwnedObject(ulong p_objId, out NetworkObject networkObject)
+        {
+            foreach (var obj in m_ownedObjects)
+            {
+                if (p_objId == obj.NetworkObjectId)
+                {
+                    networkObject = obj;
+                    return true;
+                }
+            }
+
+            networkObject = default;
+            return false;
+        }
     }
 }
