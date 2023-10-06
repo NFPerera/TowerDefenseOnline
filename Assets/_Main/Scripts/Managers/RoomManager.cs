@@ -3,6 +3,7 @@ using _Main.Scripts.Menus;
 //using _Main.Scripts.SO.Datas;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,31 +15,32 @@ namespace _Main.Scripts.Managers
         private class RoomData : INetworkSerializable
         {
             public int RoomId;
-            public int AvatarId;
             public string Name;
             public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
             {
                 serializer.SerializeValue(ref RoomId);
                 serializer.SerializeValue(ref Name);
-                serializer.SerializeValue(ref AvatarId);
             }
         }
+        
+        
         [SerializeField] private List<PlayerAvatarController> playersAvatars;
-        private NetworkVariable<int> m_currPlayersInRoom = new NetworkVariable<int>();
-        
-        
+        //private NetworkVariable<int> m_currPlayersInRoom = new NetworkVariable<int>();
         private Dictionary<ulong, RoomData> m_roomDatas = new Dictionary<ulong, RoomData>();
+        private int m_playersCount;
         private void Awake()
         {
+            if (!IsServer)
+            {
+                this.enabled = false;
+                return;
+            }
             foreach (var avatar in playersAvatars)
             {
                 avatar.DeActivate();
             }
-            
-            // foreach (var name in playersNamesObj)
-            // {
-            //     name.gameObject.SetActive(false);
-            // }
+
+            m_playersCount = 0;
         }
 
 
@@ -55,24 +57,26 @@ namespace _Main.Scripts.Managers
         // }
 
         [ServerRpc(RequireOwnership = false)]
-        private void RequestPlayerJoinRoomUpdateServerRpc(ulong p_ulong, RoomData p_roomData)
+        public void RequestPlayerJoinRoomUpdateServerRpc(ulong p_ulong, string p_playersName)
         {
-            m_roomDatas.Add(p_ulong, p_roomData);
+
+            var data = new RoomData();
+            data.Name = p_playersName;
+            data.RoomId = m_playersCount;
+            m_roomDatas.Add(p_ulong, data);
             
-            Debug.Log($"Players in room: {m_currPlayersInRoom.Value}");
-            m_currPlayersInRoom.Value++;
-            RequestPlayerJoinRoomClientRpc(p_ulong, p_roomData);
+            Debug.Log($"Players in room: {m_playersCount}");
+            m_playersCount++;
+            RefreshWaitingRoomView();
         }
 
-        [ClientRpc]
-        private void RequestPlayerJoinRoomClientRpc(ulong p_ulong, RoomData p_roomData)
+        private void RefreshWaitingRoomView()
         {
-            //m_roomDatas.Add(p_ulong, p_roomData);
             foreach (var data in m_roomDatas)
             {
                 var roomId = data.Value.RoomId;
                 var avatar = playersAvatars[roomId];
-                avatar.SetPlayersName(m_roomDatas[data.Key].Name);
+                avatar.SetPlayersName(data.Value.Name);
                 avatar.Activate();
             }
 

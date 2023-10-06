@@ -1701,7 +1701,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1902050916}
+        m_TargetAssemblyTypeName: _Main.Scripts.Menus.MainMenuController, Assembly-CSharp
+        m_MethodName: OnChangeUserName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -4161,6 +4173,7 @@ MonoBehaviour:
   serverButton: {fileID: 1786145533}
   clientButton: {fileID: 717334711}
   inputFieldName: {fileID: 958576834}
+  roomManager: {fileID: 2139069333}
   waitingRoomGameObject: {fileID: 377024833}
   startGameButton: {fileID: 1417511528}
   playersName: Carlitos

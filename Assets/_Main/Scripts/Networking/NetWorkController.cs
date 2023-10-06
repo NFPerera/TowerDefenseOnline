@@ -24,9 +24,7 @@ namespace _Main.Scripts.Networking
 
         public void OnHost()
         {
-            var instance = NetworkManager.Singleton;
-
-            instance.StartHost();
+            NetworkManager.Singleton.StartHost();
         }
 
         public void OnServer()

@@ -23,7 +23,8 @@ namespace _Main.Scripts.Menus
         [SerializeField] private Button clientButton;
         [SerializeField] private TMP_InputField inputFieldName;
 
-        [Header("RoomSetting")]
+        [Header("RoomSetting")] 
+        [SerializeField] private RoomManager roomManager;
         [SerializeField] private GameObject waitingRoomGameObject;
         [SerializeField] private GameObject startGameButton;
         [SerializeField] private string playersName = "Carlitos"; 
@@ -67,6 +68,7 @@ namespace _Main.Scripts.Menus
         {
             NetworkManager.Singleton.OnClientStarted += OnWaitingRoomEnable;
             controller.OnClient();
+            roomManager.RequestPlayerJoinRoomUpdateServerRpc(NetworkManager.Singleton.LocalClientId, playersName);
             SetInteractableButtons(false);
         }
 
