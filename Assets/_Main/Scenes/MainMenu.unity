@@ -1445,8 +1445,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a461ea54c79a4a6abb033b9412dc9d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MaxLifePoints>k__BackingField: 0
-  <StartMoneyPoints>k__BackingField: 0
+  <MaxLifePoints>k__BackingField: 100
+  <StartMoneyPoints>k__BackingField: 100
   playerPrefab: {fileID: 4513759941475703775, guid: 2e3a06ce190d8f54d9155053a02bce9c, type: 3}
   SpawnableNetworkObjects:
   - {fileID: 3648190776440366776, guid: c1badabca6cdb614caa3b94e1e51546a, type: 3}
@@ -3086,9 +3086,8 @@ GameObject:
   - component: {fileID: 1576776987}
   - component: {fileID: 1576776986}
   - component: {fileID: 1576776985}
-  - component: {fileID: 1576776988}
   m_Layer: 0
-  m_Name: NetWorkManager
+  m_Name: NetworkManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3136,7 +3135,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1576776985}
-    PlayerPrefab: {fileID: 3884153137711751393, guid: 2e3a06ce190d8f54d9155053a02bce9c, type: 3}
+    PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 0828fbf449f6b264d9e45e539dde5476, type: 2}
@@ -3173,18 +3172,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1576776988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1576776984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3ed2cc01686a32469572372f4205416, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1611109518
 GameObject:
   m_ObjectHideFlags: 0
@@ -4166,7 +4153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a0442b68b4419a83ac6fa73280b478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 1576776988}
   mainMenuObj: {fileID: 1624576235}
   creditsScreenObj: {fileID: 1684203986}
   hostButton: {fileID: 975611017}

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _Main.Scripts.Networking
 {
@@ -28,11 +29,6 @@ namespace _Main.Scripts.Networking
         private const int MaxUndos = 25;
         private void Awake()
         {
-            if (!IsServer)
-            {
-                this.enabled = false;
-                return;
-            }
             if (m_instance != null && m_instance != this)
             {
                 Destroy(this);
@@ -41,9 +37,30 @@ namespace _Main.Scripts.Networking
 
             m_instance = this;
             //Este es el id del server?????
-            m_serverId = NetworkManager.Singleton.LocalClientId;
+            //m_serverId = NetworkManager.Singleton.LocalClientId;
             DontDestroyOnLoad(this.gameObject);
             
+        }
+        
+        public void OnHost()
+        {
+            NetworkManager.Singleton.StartHost();
+        }
+
+        public void OnServer()
+        {
+            NetworkManager.Singleton.StartServer();
+        }
+
+        public void OnClient()
+        {
+            NetworkManager.Singleton.StartClient();
+        }
+        
+        public void ChangeNetScene(string p_sceneName)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(p_sceneName, LoadSceneMode.Single);
+            // GameNetworkManager.TriggerGameSceneLoaded();
         }
 
         [ServerRpc]
@@ -92,7 +109,7 @@ namespace _Main.Scripts.Networking
                 spawnableNetworkObject.SetOwnerId(p_OwnerId);
             }
 
-            if (p_OwnerId == m_serverId)
+            if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
             {
                 m_serverObj.Add(obj);
                 return;

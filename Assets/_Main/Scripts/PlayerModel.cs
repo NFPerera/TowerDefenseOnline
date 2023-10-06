@@ -24,7 +24,6 @@ namespace _Main.Scripts
             }
 
             m_myId = NetworkManager.Singleton.LocalClientId;
-            MasterManager.Instance.RequestSpawnPlayerDicServerRpc(m_myId);
         }
 
         public void SetPlayersName(string p_s) => m_playersName = p_s;

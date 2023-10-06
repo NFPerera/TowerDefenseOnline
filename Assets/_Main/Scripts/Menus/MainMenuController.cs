@@ -12,7 +12,6 @@ namespace _Main.Scripts.Menus
 {
     public class MainMenuController : MonoBehaviour
     {
-        [SerializeField] private NetWorkController controller;
 
         [Header("MainMenu")] 
         [SerializeField] private GameObject mainMenuObj;
@@ -53,28 +52,28 @@ namespace _Main.Scripts.Menus
         public void OnHostEventHandler()
         {
             NetworkManager.Singleton.OnServerStarted += OnWaitingRoomEnable;
-            controller.OnHost();
+            MasterManager.Instance.OnHost();
             SetInteractableButtons(false);
         }
 
         public void OnServerEventHandler()
         {
             NetworkManager.Singleton.OnServerStarted += OnWaitingRoomEnable;
-            controller.OnServer();
+            MasterManager.Instance.OnServer();
             SetInteractableButtons(false);
         }
 
         public void OnClientEventHandler()
         {
             NetworkManager.Singleton.OnClientStarted += OnWaitingRoomEnable;
-            controller.OnClient();
+            MasterManager.Instance.OnClient();
             roomManager.RequestPlayerJoinRoomUpdateServerRpc(NetworkManager.Singleton.LocalClientId, playersName);
             SetInteractableButtons(false);
         }
 
         public void OnStartGameButtonClicked()
         {
-            controller.ChangeNetScene(sceneToLoad);
+            MasterManager.Instance.ChangeNetScene(sceneToLoad);
         }
 
         public void OnCreditsButtonClicked()
@@ -102,17 +101,7 @@ namespace _Main.Scripts.Menus
             MasterManager.Instance.SetPlayersNameServerRpc(id, playersName);
         }
 
-        public void OnCharacterSelection(int charId)
-        {
-            //var instance = GameManager.Instance;
-            //var data = instance.GetPlayersData();
-            
-            //instance.SetPlayerSpawnData(data[charId], charId);
-            //roomManager.OnPlayerJoinRoom(data[charId], NetworkManager.Singleton.LocalClientId);
-            OnWaitingRoomEnable();
-        }
-        
-        
+
         private void OnFailedConnection()
         {
             SetInteractableButtons(true);
