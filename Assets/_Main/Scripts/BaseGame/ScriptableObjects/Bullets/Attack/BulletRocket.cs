@@ -9,7 +9,8 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
     [CreateAssetMenu(fileName = "BulletRocket", menuName = "_main/Bullet/Data/Attack/RocketBulletAttack", order = 0)]
     public class BulletRocket : BulletAttack
     {
-        private Collider2D[] _overlapArea = new Collider2D[64];
+        [SerializeField] private float explosionRadius = 3f;
+        private Collider2D[] m_overlapArea = new Collider2D[64];
         
         public override void Attack(BulletModel model)
         {
@@ -17,8 +18,8 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
             {
                 GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(), model.GetDamage()));
                 
-                Physics2D.OverlapCircleNonAlloc(model.transform.position, 3, _overlapArea);
-                foreach (Collider2D collider in _overlapArea)
+                Physics2D.OverlapCircleNonAlloc(model.transform.position, explosionRadius, m_overlapArea);
+                foreach (Collider2D collider in m_overlapArea)
                 {
                     if(!collider.CompareTag("Enemies"))
                         return;

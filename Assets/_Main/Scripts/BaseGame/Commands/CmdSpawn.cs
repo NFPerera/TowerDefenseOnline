@@ -18,10 +18,11 @@ namespace _Main.Scripts.BaseGame.Commands
         private AFactory<SpawnableNetworkObject> m_gameObjectFactory = new AFactory<SpawnableNetworkObject>();
 
         //Pedir Id en el constructor
-        public CmdSpawn(SpawnableNetworkObject prefab, Vector3 spawnPosition)
+        public CmdSpawn(SpawnableNetworkObject prefab,ulong requesterId, Vector3 spawnPosition)
         {
             m_prefab = prefab;
             m_position = spawnPosition;
+            m_requesterId = requesterId;
         }
         
         public void Execute()

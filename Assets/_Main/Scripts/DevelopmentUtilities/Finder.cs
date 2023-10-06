@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _main.Scripts.DevelopmentUtilities
+namespace _Main.Scripts.DevelopmentUtilities
 {
     public class Finder : MonoBehaviour
     {

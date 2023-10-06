@@ -42,7 +42,8 @@ namespace _Main.Scripts.Networking
             m_instance = this;
             //Este es el id del server?????
             m_serverId = NetworkManager.Singleton.LocalClientId;
-
+            DontDestroyOnLoad(this.gameObject);
+            
         }
 
         [ServerRpc]

@@ -72,7 +72,6 @@ namespace _Main.Scripts.Managers
             {
                 var roomId = data.Value.RoomId;
                 var avatar = playersAvatars[roomId];
-                avatar.SetImage(data.Value.AvatarId);
                 avatar.SetPlayersName(m_roomDatas[data.Key].Name);
                 avatar.Activate();
             }

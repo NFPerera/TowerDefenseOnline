@@ -24,7 +24,6 @@ namespace _Main.Scripts.BaseGame._Managers
         
         public Action<int> OnChangeLifePoints;
         public Action<int> OnChangeMoney;
-        public Action OnClick;
         public Action OnGameOver;
 
         private const int MaxUndos = 25;
@@ -61,11 +60,6 @@ namespace _Main.Scripts.BaseGame._Managers
             }
 
             m_events.Clear();
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                OnClick.Invoke();
-            }
         }
 
         

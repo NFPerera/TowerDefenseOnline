@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace _Main.Scripts.BaseGame.Controllers
 {
-    public class WaveController : MonoBehaviour
+    public class WaveController : NetworkBehaviour
     {
         [System.Serializable]
         public class Wave
@@ -23,13 +23,21 @@ namespace _Main.Scripts.BaseGame.Controllers
         private int m_spawnedEnemies;
         private float m_timer;
         private bool m_isWaveActive;
-        
+        private ulong m_serverId;
         [SerializeField] private Transform spawnPoint;
 
 
         private UIManager m_ui;
         private void Awake()
         {
+            if (!IsServer)
+            {
+                enabled = false;
+                return;
+            }
+
+            ///EESTE EES EEL SERVEER???
+            m_serverId = OwnerClientId;
             m_ui = GetComponent<UIManager>();
         }
 
@@ -66,7 +74,7 @@ namespace _Main.Scripts.BaseGame.Controllers
                 Random rnd = new Random();
                 var aux = rnd.Next(0, 3);
                 
-                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux], spawnPoint.position));
+                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, spawnPoint.position));
                 m_timer = waves[m_nextWave].countDownBetweenEnemies;
                 m_spawnedEnemies++;
             }
@@ -87,7 +95,7 @@ namespace _Main.Scripts.BaseGame.Controllers
                 Random rnd = new Random();
                 var aux = rnd.Next(0, 4);
                 
-                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux], spawnPoint.position));
+                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, spawnPoint.position));
                 m_timer = waves[m_nextWave].countDownBetweenEnemies;
                 m_spawnedEnemies++;
             }

@@ -1,7 +1,9 @@
 ﻿using _Main.Scripts.BaseGame.Commands;
+using _Main.Scripts.DevelopmentUtilities;
 using _Main.Scripts.Networking;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace _Main.Scripts.BaseGame._Managers
 {
@@ -10,29 +12,52 @@ namespace _Main.Scripts.BaseGame._Managers
         public static BuildManager Instance;
 
         private SpawnableNetworkObject m_towerToBuild;
-        private MousePosition m_mousePosition;
+        private Vector2 m_mousePosition;
+        private ulong m_id;
         private void Start()
         {
             if(Instance != null) Destroy(this);
                 Instance = this;
 
                 //TODO: Refactorizar todo lo del mouse con el nuevo input sisteem
-            m_mousePosition = GameObject.FindGameObjectWithTag("Mouse").GetComponent<MousePosition>();
-            GameManager.Instance.OnClick += BuildTowerInWorld;
+            //m_mousePosition = GameObject.FindGameObjectWithTag("Mouse").GetComponent<MousePosition>();
+            
+            InputManager.Instance.SubscribeInput("MousePos", OnMouseMovement);
+            InputManager.Instance.SubscribeInput("LeftClick", OnLeftClick);
+            m_id = NetworkManager.Singleton.LocalClientId;
+            //GameManager.Instance.OnClick += BuildTowerInWorld;
         }
-        public void SetTowerToBuild(SpawnableNetworkObject towerToBuild) => m_towerToBuild = towerToBuild;
 
-        private void BuildTowerInWorld()
+        private void OnLeftClick(InputAction.CallbackContext obj)
         {
-            var clickPosition = m_mousePosition.GetMousePosition();
             if(m_towerToBuild == null) return;
             
-            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild, clickPosition);
+            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_id, m_mousePosition);
             
             GameManager.Instance.AddEventQueue(cmdSpawn);
             GameManager.Instance.AddSellEvent(cmdSpawn);
             
             m_towerToBuild = null;
         }
+
+        private void OnMouseMovement(InputAction.CallbackContext obj)
+        {
+            m_mousePosition = obj.ReadValue<Vector2>();
+        }
+
+        public void SetTowerToBuild(SpawnableNetworkObject towerToBuild) => m_towerToBuild = towerToBuild;
+
+        // private void BuildTowerInWorld()
+        // {
+        //     var clickPosition = m_mousePosition.GetMousePosition();
+        //     if(m_towerToBuild == null) return;
+        //     
+        //     CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild, clickPosition);
+        //     
+        //     GameManager.Instance.AddEventQueue(cmdSpawn);
+        //     GameManager.Instance.AddSellEvent(cmdSpawn);
+        //     
+        //     m_towerToBuild = null;
+        // }
     }
 }
