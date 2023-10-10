@@ -5,12 +5,24 @@ using UnityEngine;
 
 namespace _Main.Scripts.Managers
 {
-    public class Instantiator : MonoBehaviour
+    public class Instantiator : NetworkBehaviour
     {
+        [SerializeField] private NetworkObject waveManager;
         private void Start()
         {
-            if(!NetworkManager.Singleton.IsServer)
+
+            if (NetworkManager.Singleton.IsServer)
+            {
+                var instance = Instantiate(waveManager);
+                instance.Spawn();
+            }
+            else
+            {
                 MasterManager.Instance.RequestSpawnPlayerDicServerRpc(NetworkManager.Singleton.LocalClientId);
+                
+            }
+                
+            
         }
     }
 }

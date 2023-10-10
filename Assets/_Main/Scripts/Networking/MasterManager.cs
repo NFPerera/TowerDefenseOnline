@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
+using _Main.Scripts.Menus;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,45 +39,34 @@ namespace _Main.Scripts.Networking
             }
 
             m_instance = this;
-            //Este es el id del server?????
-            //m_serverId = NetworkManager.Singleton.LocalClientId;
+            
+            m_serverId = NetworkManager.Singleton.LocalClientId;
             DontDestroyOnLoad(this.gameObject);
             
         }
-        
-        public void OnHost()
+
+        public override void OnNetworkSpawn()
         {
-            NetworkManager.Singleton.StartHost();
+            m_playersCount = 0;
+
+            var a = FindObjectsByType<PlayerAvatarController>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
+            m_playersAvatars = a.ToList();
         }
 
-        public void OnServer()
-        {
-            NetworkManager.Singleton.StartServer();
-        }
-
-        public void OnClient()
-        {
-            NetworkManager.Singleton.StartClient();
-        }
-        
-        public void ChangeNetScene(string p_sceneName)
-        {
-            NetworkManager.Singleton.SceneManager.LoadScene(p_sceneName, LoadSceneMode.Single);
-            // GameNetworkManager.TriggerGameSceneLoaded();
-        }
+        public void ChangeNetScene(string pSceneName) => NetworkManager.Singleton.SceneManager.LoadScene(pSceneName, LoadSceneMode.Single);
 
         [ServerRpc]
-        public void SetPlayersNameServerRpc(ulong id, string p_name)
+        public void SetPlayersNameServerRpc(ulong id, string pName)
         {
             if (m_playerDic.ContainsKey(id))
             {
-                m_playerDic[id].PlayersName = p_name;
+                m_playerDic[id].PlayersName = pName;
             }
             else
             {
                 m_playerDic[id] = new PlayerData();
-                m_playerDic[id].PlayersName = p_name;
-                m_playerDic[id].Model?.SetPlayersName(p_name);
+                m_playerDic[id].PlayersName = pName;
+                m_playerDic[id].Model?.SetPlayersName(pName);
             }
         }
 
@@ -101,8 +93,8 @@ namespace _Main.Scripts.Networking
         public void RequestSpawnGameObjectServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos)
         {
             var obj = Instantiate<NetworkObject>(SpawnableNetworkObjects[spawnObjectId]) ;
-            obj.Spawn();
             obj.transform.position = pos;
+            obj.Spawn();
 
             if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
             {
@@ -116,6 +108,12 @@ namespace _Main.Scripts.Networking
             }
             
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj);
+        }
+
+        [ClientRpc]
+        public void RequestSpawnGameObjectClientRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos)
+        {
+            
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -158,5 +156,72 @@ namespace _Main.Scripts.Networking
                 }
             }
         }
+
+        #region Main Menu
+
+            [System.Serializable]
+            public class RoomData
+            {
+                public int RoomId;
+                public string Name;
+            }
+            
+            private List<PlayerAvatarController> m_playersAvatars = new List<PlayerAvatarController>();
+            private Dictionary<ulong, RoomData> m_roomDatas = new Dictionary<ulong, RoomData>();
+            private int m_playersCount;
+            
+            
+            [ServerRpc(RequireOwnership = false)]
+            public void RequestPlayerJoinRoomUpdateServerRpc(ulong p_ulong, string p_playersName)
+            {
+                if(p_ulong == m_serverId)
+                    return;
+                
+                
+                var data = new RoomData();
+                
+                
+                data.Name = p_playersName;
+                data.RoomId = m_playersCount;
+                
+                
+                if (m_roomDatas.TryAdd(p_ulong, data))
+                {
+                    Debug.Log($"Players in room: {m_playersCount}");
+                    var json = Serializador.SerializeDic(m_roomDatas);
+                    RefreshDictionaryClientRpc(json);
+                    m_playersCount++;
+                }
+                else
+                {
+                    Debug.LogError("Player ID was already in the Dictionary");
+                } 
+            }
+
+            private void RefreshWaitingRoomView()
+            {
+                foreach (var data in m_roomDatas)
+                {
+                    var roomId = data.Value.RoomId;
+                    var avatar = m_playersAvatars[roomId];
+                    avatar.SetPlayersName(data.Value.Name);
+                    avatar.Activate();
+                }
+            }
+
+            [ClientRpc]
+            private void RefreshDictionaryClientRpc(string json)
+            {
+                if (NetworkManager.Singleton.IsServer)
+                {
+                    RefreshWaitingRoomView();
+                    return;
+                }
+                
+                Serializador.DeSerializeDic(json, m_roomDatas);
+                RefreshWaitingRoomView();
+            }
+        
+        #endregion
     }
 }

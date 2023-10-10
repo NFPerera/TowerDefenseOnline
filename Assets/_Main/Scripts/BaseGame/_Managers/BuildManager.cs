@@ -12,10 +12,17 @@ namespace _Main.Scripts.BaseGame._Managers
         public static BuildManager Instance;
 
         private SpawnableNetworkObject m_towerToBuild;
+        private Camera m_mainCamera;
         private Vector2 m_mousePosition;
         private ulong m_id;
         private void Start()
         {
+            // if (NetworkManager.Singleton.IsServer)
+            // {
+            //     this.enabled = false;
+            //     return;
+            // }
+            
             if(Instance != null) Destroy(this);
                 Instance = this;
 
@@ -25,6 +32,7 @@ namespace _Main.Scripts.BaseGame._Managers
             InputManager.Instance.SubscribeInput("MousePos", OnMouseMovement);
             InputManager.Instance.SubscribeInput("LeftClick", OnLeftClick);
             m_id = NetworkManager.Singleton.LocalClientId;
+            m_mainCamera = Camera.main;
             //GameManager.Instance.OnClick += BuildTowerInWorld;
         }
 
@@ -32,7 +40,8 @@ namespace _Main.Scripts.BaseGame._Managers
         {
             if(m_towerToBuild == null) return;
             
-            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_id, m_mousePosition);
+            var pos = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
+            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_id, pos);
             
             GameManager.Instance.AddEventQueue(cmdSpawn);
             GameManager.Instance.AddSellEvent(cmdSpawn);

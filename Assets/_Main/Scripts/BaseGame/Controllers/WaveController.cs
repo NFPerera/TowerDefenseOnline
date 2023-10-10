@@ -24,7 +24,7 @@ namespace _Main.Scripts.BaseGame.Controllers
         private float m_timer;
         private bool m_isWaveActive;
         private ulong m_serverId;
-        [SerializeField] private Transform spawnPoint;
+        private Vector2 m_spawnPoint = new Vector2(-10f,0.8f);
 
 
         private UIManager m_ui;
@@ -74,7 +74,7 @@ namespace _Main.Scripts.BaseGame.Controllers
                 Random rnd = new Random();
                 var aux = rnd.Next(0, 3);
                 
-                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, spawnPoint.position));
+                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, m_spawnPoint));
                 m_timer = waves[m_nextWave].countDownBetweenEnemies;
                 m_spawnedEnemies++;
             }
@@ -95,7 +95,7 @@ namespace _Main.Scripts.BaseGame.Controllers
                 Random rnd = new Random();
                 var aux = rnd.Next(0, 4);
                 
-                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, spawnPoint.position));
+                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, m_spawnPoint));
                 m_timer = waves[m_nextWave].countDownBetweenEnemies;
                 m_spawnedEnemies++;
             }

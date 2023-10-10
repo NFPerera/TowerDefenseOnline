@@ -27,7 +27,7 @@ namespace _Main.Scripts.BaseGame.Commands
         
         public void Execute()
         {
-            m_instance = m_gameObjectFactory.Create(m_prefab);
+            //m_instance = m_gameObjectFactory.Create(m_prefab);
             MasterManager.Instance.RequestSpawnGameObjectServerRpc(m_requesterId, m_prefab.SpawnObjectId, m_position);
         }
         public void Undo()

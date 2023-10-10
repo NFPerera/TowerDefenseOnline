@@ -1,33 +1,30 @@
-﻿using System.Runtime.CompilerServices;
-using _Main.Scripts.BaseGame._Managers;
+﻿using System.Collections;
 using _Main.Scripts.Managers;
 using _Main.Scripts.Networking;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using static _Main.Scripts.Managers.GameNetworkManager;
 
 namespace _Main.Scripts.Menus
 {
     public class MainMenuController : MonoBehaviour
     {
 
+        [Header("Server Managers")] 
+        [SerializeField] private NetworkObject managerObj;
         [Header("MainMenu")] 
         [SerializeField] private GameObject mainMenuObj;
 
         [SerializeField] private GameObject creditsScreenObj;
         [SerializeField] private Button hostButton;
-        [SerializeField] private Button serverButton;
         [SerializeField] private Button clientButton;
         [SerializeField] private TMP_InputField inputFieldName;
 
         [Header("RoomSetting")] 
-        [SerializeField] private RoomManager roomManager;
         [SerializeField] private GameObject waitingRoomGameObject;
         [SerializeField] private GameObject startGameButton;
-        [SerializeField] private string playersName = "Carlitos"; 
-        
+        [SerializeField] private string playersName = "Carlitos";
         
         
         [Header("StartGameSetting")]
@@ -44,33 +41,43 @@ namespace _Main.Scripts.Menus
 
         private void OnDestroy()
         {
-            NetworkManager.Singleton.OnTransportFailure -= OnFailedConnection;
+            //NetworkManager.Singleton.OnTransportFailure -= OnFailedConnection;
         }
 
 #region Buttons
 
         public void OnHostEventHandler()
         {
-            NetworkManager.Singleton.OnServerStarted += OnWaitingRoomEnable;
-            MasterManager.Instance.OnHost();
-            SetInteractableButtons(false);
-        }
-
-        public void OnServerEventHandler()
-        {
-            NetworkManager.Singleton.OnServerStarted += OnWaitingRoomEnable;
-            MasterManager.Instance.OnServer();
+            NetworkManager.Singleton.OnServerStarted += SpawnServerManagers;
+            ///MasterManager.Instance.OnHost();
+            NetworkManager.Singleton.StartHost();
+            //Crear otro metodo para el server started que cree el MasterManager
             SetInteractableButtons(false);
         }
 
         public void OnClientEventHandler()
         {
             NetworkManager.Singleton.OnClientStarted += OnWaitingRoomEnable;
-            MasterManager.Instance.OnClient();
-            roomManager.RequestPlayerJoinRoomUpdateServerRpc(NetworkManager.Singleton.LocalClientId, playersName);
+            NetworkManager.Singleton.StartClient();
+            Debug.Log($"Button Pressed, id {NetworkManager.Singleton.LocalClientId}");
+            
+            
             SetInteractableButtons(false);
         }
 
+
+        private void SpawnServerManagers()
+        {
+            mainMenuObj.SetActive(false);
+            waitingRoomGameObject.SetActive(true);
+            var manager = NetworkManager.Singleton;
+            startGameButton.SetActive(manager.IsHost || manager.IsServer);
+
+            Debug.Log($"Creating Server. . . {NetworkManager.Singleton.LocalClientId}");
+
+            var obj = Instantiate<NetworkObject>(managerObj);
+            obj.Spawn();
+        }
         public void OnStartGameButtonClicked()
         {
             MasterManager.Instance.ChangeNetScene(sceneToLoad);
@@ -97,8 +104,8 @@ namespace _Main.Scripts.Menus
         public void OnChangeUserName()
         {
             playersName = inputFieldName.text;
-            var id = NetworkManager.Singleton.LocalClientId;
-            MasterManager.Instance.SetPlayersNameServerRpc(id, playersName);
+            // var id = NetworkManager.Singleton.LocalClientId;
+            // MasterManager.Instance.SetPlayersNameServerRpc(id, playersName);
         }
 
 
@@ -110,7 +117,6 @@ namespace _Main.Scripts.Menus
         {
             hostButton.enabled = p_b;
             clientButton.enabled = p_b;
-            serverButton.enabled = p_b;
         }
 
         private void OnMainMenuEnable()
@@ -126,7 +132,17 @@ namespace _Main.Scripts.Menus
             waitingRoomGameObject.SetActive(true);
             var manager = NetworkManager.Singleton;
             startGameButton.SetActive(manager.IsHost || manager.IsServer);
+            
+            Debug.Log($"Conecting. . . {NetworkManager.Singleton.LocalClientId}");
+            NetworkManager.Singleton.OnClientConnectedCallback += OnConnectionToServer;
         }
-        
+
+        private void OnConnectionToServer(ulong obj)
+        {
+            if(obj == NetworkManager.Singleton.LocalClientId)
+                MasterManager.Instance.RequestPlayerJoinRoomUpdateServerRpc(NetworkManager.Singleton.LocalClientId, playersName);
+        }
+
+
     }
 }

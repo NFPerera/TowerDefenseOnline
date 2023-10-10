@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _Main.Scripts.BaseGame.Interfaces;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame._Managers
