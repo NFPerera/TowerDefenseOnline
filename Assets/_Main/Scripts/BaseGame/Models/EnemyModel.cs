@@ -19,13 +19,17 @@ namespace _Main.Scripts.BaseGame.Models
         
         private HealthController m_healthController;
         private SpriteRenderer m_sprite;
-        private List<Transform> m_pathPoints;
+        private List<Vector3> m_pathPoints = new List<Vector3>();
         private float m_speed;
         private int m_indexPathPoints;
         private int m_currLife;
         private void Awake()
         {
-            m_pathPoints = GameManager.Instance.PathPoints;
+            foreach (var trans in GameManager.Instance.PathPoints)
+            {
+                m_pathPoints.Add(trans.position);
+            }
+            
             m_healthController = new HealthController(data.enemiesTierDatas[index].MaxHealth);
 
             m_sprite = gameObject.GetComponent<SpriteRenderer>();
@@ -36,7 +40,7 @@ namespace _Main.Scripts.BaseGame.Models
         private void Update()
         {
             var position = transform.position;
-            var distanceToTarget = Vector2.Distance(position, m_pathPoints[m_indexPathPoints < m_pathPoints.Count? m_indexPathPoints : 0].position);
+            var distanceToTarget = Vector2.Distance(position, m_pathPoints[m_indexPathPoints < m_pathPoints.Count? m_indexPathPoints : 0]);
             var dir = Vector3.zero;
 
             if (distanceToTarget < 0.1f)
@@ -50,12 +54,12 @@ namespace _Main.Scripts.BaseGame.Models
                     
                     return;
                 }
-                dir = (m_pathPoints[m_indexPathPoints].position - position).normalized;
+                dir = (m_pathPoints[m_indexPathPoints] - position).normalized;
                 
             }
             
             if(m_indexPathPoints < m_pathPoints.Count)
-                dir = (m_pathPoints[m_indexPathPoints].position - position).normalized;
+                dir = (m_pathPoints[m_indexPathPoints] - position).normalized;
             
             transform.Translate(dir * (data.enemiesTierDatas[index].Speed * Time.deltaTime));
         }

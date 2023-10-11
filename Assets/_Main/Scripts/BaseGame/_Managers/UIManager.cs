@@ -25,17 +25,17 @@ namespace _Main.Scripts.BaseGame._Managers
         
         //TODO: Cambiar screens por escenas distintas
         [Header("Screens")]
-        [SerializeField] private GameObject gameOverScreen;
-        [SerializeField] private GameObject youWonText;
-        [SerializeField] private GameObject youLoseText;
+        //[SerializeField] private GameObject gameOverScreen;
+        //[SerializeField] private GameObject youWonText;
+        //[SerializeField] private GameObject youLoseText;
 
         private bool _toggle;
 
         private void Start()
         {
-            gameOverScreen.SetActive(false);
-            youWonText.SetActive(false);
-            youLoseText.SetActive(false);
+            //gameOverScreen.SetActive(false);
+            //youWonText.SetActive(false);
+            //youLoseText.SetActive(false);
             
             GameManager.Instance.OnChangeLifePoints += SetLifeText;
             GameManager.Instance.OnChangeMoney += SetMoneyText;
@@ -60,13 +60,17 @@ namespace _Main.Scripts.BaseGame._Managers
 
         public void ActivateGameOverScreen(bool isWinning)
         {
-            gameOverScreen.SetActive(true);
+            //gameOverScreen.SetActive(true);
 
             if (isWinning)
             {
-                youWonText.SetActive(true);
+                //youWonText.SetActive(true);
             }
-            else youLoseText.SetActive(true);
+            else
+            {
+                
+                //youLoseText.SetActive(true);
+            }
         }
         public void OnFastButton()
         {

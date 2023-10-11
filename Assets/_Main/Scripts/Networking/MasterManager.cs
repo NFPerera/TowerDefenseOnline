@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using _Main.Scripts.BaseGame._Managers;
+using _Main.Scripts.BaseGame.Controllers;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.Menus;
 using Unity.Netcode;
@@ -222,6 +224,37 @@ namespace _Main.Scripts.Networking
                 RefreshWaitingRoomView();
             }
         
+        #endregion
+
+        #region Level
+
+        private WaveController m_waveController;
+            public void SearchWaveController()
+            {
+                m_waveController = FindFirstObjectByType<WaveController>();
+                m_waveController.OnFinishWave += RequestEnableWaveButtonsClientRpc;
+            }
+            
+            [ServerRpc(RequireOwnership = false)]
+            public void RequestActivateWaveServerRpc() 
+            {
+                Debug.Log($"WaveeStart");
+                m_waveController.ActivateWave();
+                RequestUnableWaveButtonsClientRpc();
+            }
+        
+            [ClientRpc]
+            public void RequestUnableWaveButtonsClientRpc()
+            {
+                GameManager.Instance.ToggleWaveButton(false);
+            }
+            
+            [ClientRpc]
+            public void RequestEnableWaveButtonsClientRpc()
+            {
+                GameManager.Instance.ToggleWaveButton(true);
+            }
+
         #endregion
     }
 }

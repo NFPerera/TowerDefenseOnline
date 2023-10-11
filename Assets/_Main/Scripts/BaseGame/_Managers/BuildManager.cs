@@ -1,5 +1,6 @@
 ﻿using _Main.Scripts.BaseGame.Commands;
 using _Main.Scripts.DevelopmentUtilities;
+using _Main.Scripts.DevelopmentUtilities.Extensions;
 using _Main.Scripts.Networking;
 using Unity.Netcode;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace _Main.Scripts.BaseGame._Managers
             if(m_towerToBuild == null) return;
             
             var pos = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
-            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_id, pos);
+            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_id, pos.XY0());
             
             GameManager.Instance.AddEventQueue(cmdSpawn);
             GameManager.Instance.AddSellEvent(cmdSpawn);

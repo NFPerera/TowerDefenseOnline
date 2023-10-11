@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Main.Scripts.BaseGame.Controllers;
 using _Main.Scripts.BaseGame.Interfaces;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
+using _Main.Scripts.Networking;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
+using UnityEngine.UI;
 
 namespace _Main.Scripts.BaseGame._Managers
 {
@@ -115,8 +119,18 @@ namespace _Main.Scripts.BaseGame._Managers
             }
 
         #endregion
-        
-        
+
+        [SerializeField] private Button waveButton;
+        private WaveController m_waveController;
+        public void ActivateWave()
+        {
+            MasterManager.Instance.RequestActivateWaveServerRpc();
+        }
+
+        public void ToggleWaveButton(bool b)
+        {
+            waveButton.interactable = b;
+        }
         
     }
 }

@@ -1,7 +1,10 @@
-﻿using _Main.Scripts.BaseGame._Managers;
+﻿using System;
+using _Main.Scripts.BaseGame._Managers;
 using _Main.Scripts.BaseGame.Commands;
+using _Main.Scripts.DevelopmentUtilities.Extensions;
 using _Main.Scripts.Networking;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -25,10 +28,10 @@ namespace _Main.Scripts.BaseGame.Controllers
         private bool m_isWaveActive;
         private ulong m_serverId;
         private Vector2 m_spawnPoint = new Vector2(-10f,0.8f);
-
-
+        
         private UIManager m_ui;
-        private void Awake()
+        public Action OnFinishWave;
+        private void Start()
         {
             if (!IsServer)
             {
@@ -36,7 +39,7 @@ namespace _Main.Scripts.BaseGame.Controllers
                 return;
             }
 
-            ///EESTE EES EEL SERVEER???
+            m_nextWave = 0;
             m_serverId = OwnerClientId;
             m_ui = GetComponent<UIManager>();
         }
@@ -57,6 +60,7 @@ namespace _Main.Scripts.BaseGame.Controllers
                 {
                     m_timer = waves[m_nextWave].countDownBetweenEnemies;
                     m_spawnedEnemies = 0;
+                    
                 }
             }
             else
@@ -72,9 +76,9 @@ namespace _Main.Scripts.BaseGame.Controllers
             if (m_timer <= 0)
             {
                 Random rnd = new Random();
-                var aux = rnd.Next(0, 3);
+                var aux = rnd.Next(0, waves[m_nextWave].enemies.Length);
                 
-                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, m_spawnPoint));
+                GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, m_spawnPoint.XY0()));
                 m_timer = waves[m_nextWave].countDownBetweenEnemies;
                 m_spawnedEnemies++;
             }
@@ -83,6 +87,7 @@ namespace _Main.Scripts.BaseGame.Controllers
             {
                 m_nextWave++;
                 m_isWaveActive = false;
+                OnFinishWave.Invoke();
             }
         }
 
@@ -106,6 +111,10 @@ namespace _Main.Scripts.BaseGame.Controllers
                 m_isWaveActive = false;
             }
         }
+
+
         public void ActivateWave() => m_isWaveActive = true;
+
+
     }
 }

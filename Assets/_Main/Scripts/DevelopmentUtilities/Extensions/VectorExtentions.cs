@@ -39,7 +39,7 @@ namespace _Main.Scripts.DevelopmentUtilities.Extensions
         public static Vector3 Xoz(this Vector3 p_v) => new Vector3(p_v.x, 0, p_v.z);
 
         /// <summary> Vector3 (x, y, 0) </summary>
-        public static Vector3 Xyo(this Vector3 p_v) => new Vector3(p_v.x, p_v.y, 0);
+        public static Vector3 XY0(this Vector3 p_v) => new Vector3(p_v.x, p_v.y, 0);
 
         /// <summary> Vector3 (x, 0, 0) </summary>
         public static Vector3 Xoo(this Vector3 p_v) => new Vector3(p_v.x, 0, 0);
