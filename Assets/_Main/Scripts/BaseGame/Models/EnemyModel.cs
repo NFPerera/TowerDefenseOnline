@@ -102,7 +102,14 @@ namespace _Main.Scripts.BaseGame.Models
         private void OnDie()
         {
             GameManager.Instance.OnChangeMoney.Invoke(10);
-            Destroy(gameObject);
+            RequestDestroyObjServerRpc();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void RequestDestroyObjServerRpc()
+        {
+            //PORQUEEEEEEE ME TIRA QUE NO DEBERRIA DESTRUIRLO?????????
+            Destroy(this.gameObject);
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
