@@ -8,6 +8,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets
     public class BulletData : ScriptableObject
     {
         [field: SerializeField] public float Speed { get; private set; }
+        [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public BulletAttack BulletAttack { get; private set; }
         [field: SerializeField] public BulletMovement BulletMovement { get; private set; }
     }

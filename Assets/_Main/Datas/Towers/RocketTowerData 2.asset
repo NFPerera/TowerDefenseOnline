@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7599709c0794002b1e4b03fea6088dd, type: 3}
   m_Name: RocketTowerData 2
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
-  <Cost>k__BackingField: 0
-  <Damage>k__BackingField: 0
-  <Range>k__BackingField: 0
-  <TowerAttack>k__BackingField: {fileID: 0}
-  <BulletPrefabs>k__BackingField: {fileID: 0}
+  <Name>k__BackingField: Rocket
+  <Cost>k__BackingField: 100
+  <Damage>k__BackingField: 100
+  <Range>k__BackingField: 5
+  <TowerAttack>k__BackingField: {fileID: 11400000, guid: 6deb69755f45a34499483d93e828030c, type: 2}
+  <BulletPrefabs>k__BackingField: {fileID: 2190308648205427143, guid: da1bd0ae96b898f4cade0c163f6890dd, type: 3}
   Speed: 0
   description: 

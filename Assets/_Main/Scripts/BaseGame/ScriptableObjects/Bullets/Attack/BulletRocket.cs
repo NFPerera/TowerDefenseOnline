@@ -16,7 +16,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
         {
             if (model.GetTargetTransform() != null)
             {
-                GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(), model.GetDamage()));
+                GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(), model.MyOwnerId,model.GetDamage()));
                 
                 Physics2D.OverlapCircleNonAlloc(model.transform.position, explosionRadius, m_overlapArea);
                 foreach (Collider2D collider in m_overlapArea)
@@ -26,7 +26,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
 
                     if (collider.TryGetComponent(out IDamageable damageable))
                     {
-                        GameManager.Instance.AddEventQueue(new CmdDoDamage(damageable.GetObjId(), model.GetDamage()));
+                        GameManager.Instance.AddEventQueue(new CmdDoDamage(damageable.GetObjId(),model.MyOwnerId, model.GetDamage()));
                     }
                 }
             

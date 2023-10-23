@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 3001051302345251190}
   - component: {fileID: 2846105271280436775}
   - component: {fileID: 3934935501648032689}
-  - component: {fileID: 1781640207692045299}
-  - component: {fileID: 3955250645400942567}
   - component: {fileID: 4920725700552408709}
   - component: {fileID: 6389742434675861703}
   m_Layer: 0
@@ -49,8 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2e4084ca434df3bacedc4db5e56d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MaxLifePoints>k__BackingField: 100
-  <StartMoneyPoints>k__BackingField: 1000
   <PathPoints>k__BackingField:
   - {fileID: 0}
   - {fileID: 0}
@@ -66,6 +62,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   mainCamera: {fileID: 0}
+  waveButton: {fileID: 0}
 --- !u!114 &3934935501648032689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,62 +75,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33611b8f747545a88b308bb49968a355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1781640207692045299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872108984745357167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf641ae9a2b52c94ba3ae907042d4e4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3955250645400942567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872108984745357167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46e65552ef3d455c8ec72329e2fbe012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waves:
-  - enemies:
-    - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
-    numberOfEnemies: 10
-    countDownBetweenEnemies: 1
-  - enemies:
-    - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
-    numberOfEnemies: 20
-    countDownBetweenEnemies: 1
-  - enemies:
-    - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
-    - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
-    numberOfEnemies: 50
-    countDownBetweenEnemies: 2
-  - enemies:
-    - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
-    - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
-    numberOfEnemies: 80
-    countDownBetweenEnemies: 1
-  - enemies:
-    - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
-    - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
-    - {fileID: 2192483259105855234, guid: 89b23b0356eb57a409b2429d62d70550, type: 3}
-    numberOfEnemies: 100
-    countDownBetweenEnemies: 2
-  - enemies:
-    - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
-    - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
-    - {fileID: 2192483259105855234, guid: 89b23b0356eb57a409b2429d62d70550, type: 3}
-    numberOfEnemies: 150
-    countDownBetweenEnemies: 2
-  spawnPoint: {fileID: 0}
 --- !u!114 &4920725700552408709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,9 +95,6 @@ MonoBehaviour:
   rocketButton: {fileID: 0}
   lifeText: {fileID: 0}
   moneyText: {fileID: 0}
-  gameOverScreen: {fileID: 0}
-  youWonText: {fileID: 0}
-  youLoseText: {fileID: 0}
 --- !u!114 &6389742434675861703
 MonoBehaviour:
   m_ObjectHideFlags: 0

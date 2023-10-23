@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using _Main.Scripts.BaseGame._Managers;
 using _Main.Scripts.BaseGame.Controllers;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
+using _Main.Scripts.BaseGame.Models;
 using _Main.Scripts.Menus;
 using Unity.Netcode;
 using UnityEngine;
@@ -19,8 +21,7 @@ namespace _Main.Scripts.Networking
             public PlayerModel Model;
         }
         
-        [field: SerializeField] public int MaxLifePoints { get; private set; }
-        [field: SerializeField] public int StartMoneyPoints { get; private set; }
+        
         [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private List<NetworkObject> SpawnableNetworkObjects = new List<NetworkObject>();
         
@@ -44,7 +45,9 @@ namespace _Main.Scripts.Networking
             
             m_serverId = NetworkManager.Singleton.LocalClientId;
             DontDestroyOnLoad(this.gameObject);
-            
+
+            m_lifePoints = MaxLifePoints;
+            OnChangeLifePoints += OnLooseLifePoints;
         }
 
         public override void OnNetworkSpawn()
@@ -111,11 +114,56 @@ namespace _Main.Scripts.Networking
             
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj);
         }
-
-        [ClientRpc]
-        public void RequestSpawnGameObjectClientRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos)
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void RequestDespawnGameObjectServerRpc(ulong ownerId,ulong networkObjId)
         {
-            
+
+            if (ownerId == m_serverId)
+            {
+                foreach (NetworkObject networkObject in m_serverObj)
+                {
+                    if(networkObject.NetworkObjectId != NetworkObjectId)
+                        return;
+                    
+                    networkObject.Despawn();
+                }
+                return;
+            }
+
+
+            m_playerDic[ownerId].Model.TryGetOwnedObject(networkObjId, out var obj);
+            obj.Despawn();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void RequestSpawnBulletServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos, ulong networkObjId)
+        {
+            var obj = Instantiate<NetworkObject>(SpawnableNetworkObjects[spawnObjectId]) ;
+            obj.transform.position = pos;
+            obj.Spawn();
+
+            if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
+            {
+                spawnableNetworkObject.SetOwnerId(p_OwnerId);
+            }
+
+            m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj);
+
+            //TODO: Preguntarle a Seba como hacer esto mas performante
+            //No me gusta que cada vez que se spawnee una bala tenga que buscar en toda la lista de objetos
+            if (obj.TryGetComponent(out BulletModel model))
+            {
+                foreach (var networkObject in m_serverObj)
+                {
+                    if(networkObject.NetworkObjectId != NetworkObjectId)
+                        return;
+
+                    var targetTrans = networkObject.transform;
+                    model.InitializeBullet(targetTrans);
+                }
+                
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -130,16 +178,16 @@ namespace _Main.Scripts.Networking
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void RequestDoDamageServerRpc(ulong p_objId, int damage)
+        public void RequestDoDamageServerRpc(ulong objId, ulong attacker,int damage)
         {
             foreach (var obj in m_serverObj)
             {
-                if(obj.NetworkObjectId != p_objId)
+                if(obj.NetworkObjectId != objId)
                     continue;
                 
                 if (obj.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.DoDamage(damage);
+                    damageable.DoDamage(attacker, damage);
                 }
             }
         }
@@ -227,8 +275,16 @@ namespace _Main.Scripts.Networking
         #endregion
 
         #region Level
-
-        private WaveController m_waveController;
+       
+        
+            [field: SerializeField] public int MaxLifePoints { get; private set; }
+            
+            private int m_lifePoints;
+            
+            private WaveController m_waveController;
+            
+            
+            public Action<int> OnChangeLifePoints;
             public void SearchWaveController()
             {
                 m_waveController = FindFirstObjectByType<WaveController>();
@@ -255,6 +311,30 @@ namespace _Main.Scripts.Networking
                 GameManager.Instance.ToggleWaveButton(true);
             }
 
-        #endregion
+            [ServerRpc(RequireOwnership = false)]
+            public void RequestChangeMoneyServerRpc(ulong affectedPlayer, int moneyChange)
+            {
+                m_playerDic[affectedPlayer].Model.AddMoney(moneyChange);
+            }
+            
+            private void OnLooseLifePoints(int lifeChange)
+            {
+                m_lifePoints -= lifeChange;
+
+                if (m_lifePoints <= 0) LoseGame();
+            }
+
+
+            public int GetPlayersCurrMoney(ulong playersId) => m_playerDic[playersId].Model.PlayersMoney;
+            public int GetLifePoints() => m_lifePoints;
+            
+            
+            
+            private void LoseGame()
+            {
+                //TODO; Cambiar la escena
+            }
+
+            #endregion
     }
 }

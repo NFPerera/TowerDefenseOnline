@@ -10,8 +10,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
     {
         public override void Attack(BulletModel model)
         {
-            GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(), model.GetDamage()));
-            
+            GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(),model.MyOwnerId, model.GetDamage()));
             Destroy(model.gameObject);
         }
     }

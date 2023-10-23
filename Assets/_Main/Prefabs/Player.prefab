@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca591246fe748d28c0f65dc360c56ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <StartMoneyPoints>k__BackingField: 1000
 --- !u!114 &4513759941475703775
 MonoBehaviour:
   m_ObjectHideFlags: 0

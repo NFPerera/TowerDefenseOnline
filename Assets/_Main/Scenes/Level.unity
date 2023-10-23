@@ -926,7 +926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &880191308
 Transform:
   m_ObjectHideFlags: 0
@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1750600041}
         m_TargetAssemblyTypeName: _Main.Scripts.BaseGame.Controllers.ShopController,
           Assembly-CSharp
         m_MethodName: OnButtonDownBuyTower
@@ -2844,10 +2844,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Main.Scripts.BaseGame._Managers.BuildManager,
+      - m_Target: {fileID: 1750600041}
+        m_TargetAssemblyTypeName: _Main.Scripts.BaseGame.Controllers.ShopController,
           Assembly-CSharp
-        m_MethodName: SetTowerToBuild
+        m_MethodName: OnButtonDownBuyTower
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 5651346860058390823, guid: 26b5bfa172567b44295c2fc711e53eff, type: 3}
@@ -2912,10 +2912,6 @@ PrefabInstance:
       propertyPath: waveButton
       value: 
       objectReference: {fileID: 340256716}
-    - target: {fileID: 2846105271280436775, guid: 4e15f570b300f7749891fc6e9d53e082, type: 3}
-      propertyPath: <PathPoints>k__BackingField.Array.size
-      value: 13
-      objectReference: {fileID: 0}
     - target: {fileID: 2846105271280436775, guid: 4e15f570b300f7749891fc6e9d53e082, type: 3}
       propertyPath: '<PathPoints>k__BackingField.Array.data[0]'
       value: 
@@ -3036,8 +3032,7 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1343589050
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3955250645400942567, guid: 4e15f570b300f7749891fc6e9d53e082, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

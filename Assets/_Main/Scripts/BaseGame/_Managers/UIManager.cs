@@ -1,4 +1,5 @@
 ﻿using _Main.Scripts.BaseGame.ScriptableObjects.Towers;
+using _Main.Scripts.Networking;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,13 +37,11 @@ namespace _Main.Scripts.BaseGame._Managers
             //gameOverScreen.SetActive(false);
             //youWonText.SetActive(false);
             //youLoseText.SetActive(false);
-            
-            GameManager.Instance.OnChangeLifePoints += SetLifeText;
-            GameManager.Instance.OnChangeMoney += SetMoneyText;
 
-            lifeText.text = GameManager.Instance.GetLifePoints().ToString();
-            moneyText.text = GameManager.Instance.GetMoney().ToString();
-            GameManager.Instance.OnChangeMoney += CheckButtonInteractions;
+            
+            MasterManager.Instance.OnChangeLifePoints += UpdateLifeText;
+
+            lifeText.text = MasterManager.Instance.GetLifePoints().ToString();
             
         }
 
@@ -72,21 +71,14 @@ namespace _Main.Scripts.BaseGame._Managers
                 //youLoseText.SetActive(true);
             }
         }
-        public void OnFastButton()
-        {
-            if (!_toggle)
-            {
-                Time.timeScale = 5;
-                _toggle = true;
-            }
-            else
-            {
-                Time.timeScale = 1;
-                _toggle = false;
-            }
-        }
         
-        private void SetLifeText(int x) => lifeText.text = GameManager.Instance.GetLifePoints().ToString();
-        private void SetMoneyText(int x) => moneyText.text = GameManager.Instance.GetMoney().ToString();
+        
+        public void UpdateLifeText(int x) => lifeText.text = MasterManager.Instance.GetLifePoints().ToString();
+
+        public void UpdateMoneyText(int x)
+        {
+            moneyText.text = x.ToString();
+            CheckButtonInteractions(x);
+        }
     }
 }

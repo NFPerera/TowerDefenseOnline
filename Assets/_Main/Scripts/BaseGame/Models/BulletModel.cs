@@ -19,21 +19,19 @@ namespace _Main.Scripts.BaseGame.Models
         private IDamageable m_targetDamageable;
         private ulong m_targetDamageableId;
         private CmdMove m_cmdMove;
-        private int m_damage;
         private bool m_reachTarget;
         private ulong m_objId;
 
         public BulletData GetData() => data;
-        public void InitializeBullet(Transform target, int damage)
+        public void InitializeBullet(Transform target)
         {
-            m_damage = damage;
             m_target = target;
             m_reachTarget = false;
 
 
             var dir = (m_target.position - transform.position).normalized;
             m_objId = NetworkObjectId;
-            m_cmdMove = new CmdMove(OwnerId,m_objId, dir,data.Speed);
+            m_cmdMove = new CmdMove(MyOwnerId,m_objId, dir,data.Speed);
         }
         private void Update()
         {
@@ -68,7 +66,7 @@ namespace _Main.Scripts.BaseGame.Models
             public IDamageable GetTargetIDamageable() => m_targetDamageable;
             public ulong GetTargetID() => m_targetDamageableId;
             public Transform GetTargetTransform() => m_target;
-            public int GetDamage() => m_damage;
+            public int GetDamage() => data.Damage;
             public ulong GetNetworkId() => m_objId;
 
         #endregion

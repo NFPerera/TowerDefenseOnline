@@ -4,6 +4,6 @@ namespace _Main.Scripts.BaseGame.Interfaces.BulletsInterfaces
 {
     public interface IBullet
     {
-        void InitializeBullet(Transform target, int damage);
+        void InitializeBullet(Transform target);
     }
 }

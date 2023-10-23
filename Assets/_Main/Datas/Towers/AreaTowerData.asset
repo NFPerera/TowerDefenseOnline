@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Area
   <Cost>k__BackingField: 10
-  <Damage>k__BackingField: 1
+  <Damage>k__BackingField: 100
   <Range>k__BackingField: 5
   <TowerAttack>k__BackingField: {fileID: 11400000, guid: 5f35a68afa91c324d9d7e78645adce66, type: 2}
   <BulletPrefabs>k__BackingField: {fileID: 0}

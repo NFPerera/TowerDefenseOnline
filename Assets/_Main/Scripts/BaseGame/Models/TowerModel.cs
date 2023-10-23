@@ -12,16 +12,19 @@ namespace _Main.Scripts.BaseGame.Models
         [SerializeField] private TowerData data;
         [SerializeField] private Transform shootPoint;
 
-        private List<IDamageable> _enemiesInRange = new List<IDamageable>();
-        private float _timer;
+        private List<EnemyModel> m_enemiesInRange = new List<EnemyModel>();
+        private float m_timer;
         private void Update()
         {
-            _timer += Time.deltaTime;
+            m_timer += Time.deltaTime;
             
-            if (_timer >= data.AttackSpeed)
+            if(m_enemiesInRange.Count <= 0f)
+                return;
+            
+            if (m_timer >= data.AttackSpeed)
             {
                 Attack();
-                _timer = 0f;
+                m_timer = 0f;
             }
         }
         public void Attack() => data.TowerAttack.Attack(this);
@@ -29,20 +32,20 @@ namespace _Main.Scripts.BaseGame.Models
         
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (!col.TryGetComponent(out IDamageable damageable)) return;
+            if (!col.TryGetComponent(out EnemyModel damageable)) return;
             
-            _enemiesInRange.Add(damageable);
+            m_enemiesInRange.Add(damageable);
         }
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (!other.TryGetComponent(out IDamageable damageable)) return;
+            if (!other.TryGetComponent(out EnemyModel damageable)) return;
             
-            _enemiesInRange.Remove(damageable);
+            m_enemiesInRange.Remove(damageable);
         }
 
         #region Getters
             public TowerData GetData() => data;
-            public List<IDamageable> GetEnemiesInRange() => _enemiesInRange;
+            public List<EnemyModel> GetEnemiesInRange() => m_enemiesInRange;
             public Transform GetShootPoint() => shootPoint;
 
         #endregion

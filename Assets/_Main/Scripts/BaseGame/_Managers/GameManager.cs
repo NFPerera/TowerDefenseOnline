@@ -14,8 +14,7 @@ namespace _Main.Scripts.BaseGame._Managers
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
-        [field: SerializeField] public int MaxLifePoints { get; private set; }
-        [field: SerializeField] public int StartMoneyPoints { get; private set; }
+        //[field: SerializeField] public int MaxLifePoints { get; private set; }
         [field: SerializeField] public List<Transform> PathPoints { get; private set; }
         [SerializeField] private Camera mainCamera;
 
@@ -23,13 +22,8 @@ namespace _Main.Scripts.BaseGame._Managers
         private Stack<ICommando> m_sellableEvents = new Stack<ICommando>();
         private List<ICommando> m_doneEvents = new List<ICommando>();
         private List<IDamageable> m_enemies = new List<IDamageable>();
-        private int m_lifePoints;
-        private int m_money;
         
         
-        public Action<int> OnChangeLifePoints;
-        public Action<int> OnChangeMoney;
-        public Action OnGameOver;
 
         private const int MaxUndos = 25;
         private string m_playersName;
@@ -44,12 +38,6 @@ namespace _Main.Scripts.BaseGame._Managers
 
             m_ui = GetComponent<UIManager>();
             
-            m_lifePoints = MaxLifePoints;
-            m_money = StartMoneyPoints;
-            
-            OnChangeLifePoints += OnLooseLifePoints;
-            OnChangeMoney += ChangeMoney;
-            OnGameOver += LoseGame;
         }
 
         
@@ -93,32 +81,10 @@ namespace _Main.Scripts.BaseGame._Managers
         #region Getters
             public Stack<ICommando> GetSellableEvents() => m_sellableEvents;
 
-            public int GetLifePoints() => m_lifePoints;
-            public int GetMoney() => m_money;
             public Camera GetCamera() => mainCamera;
 
         #endregion
-        
-        #region GAME RULES;
-
-            private void OnLooseLifePoints(int lifeChange)
-            {
-                m_lifePoints -= lifeChange;
-
-                if (m_lifePoints <= 0) LoseGame();
-            }
-
-            private void ChangeMoney(int moneyChange)
-            {
-                m_money += moneyChange;
-            }
-
-            private void LoseGame()
-            {
-                m_ui.ActivateGameOverScreen(false);
-            }
-
-        #endregion
+     
 
         [SerializeField] private Button waveButton;
         private WaveController m_waveController;

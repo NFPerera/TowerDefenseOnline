@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.Models
 {
-    [RequireComponent(typeof(MovementController))]
     public class EnemyModel : SpawnableNetworkObject, IDamageable
     {
         [SerializeField] private EnemyData data;
@@ -49,9 +48,9 @@ namespace _Main.Scripts.BaseGame.Models
                 
                 if (m_indexPathPoints >= m_pathPoints.Count)
                 {
-                    GameManager.Instance.OnChangeLifePoints.Invoke(index+ 1);
-                    Destroy(gameObject);
-                    
+                    MasterManager.Instance.OnChangeLifePoints.Invoke(index+ 1);
+                    //Destroy(gameObject);
+                    MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, NetworkObjectId);
                     return;
                 }
                 dir = (m_pathPoints[m_indexPathPoints] - position).normalized;
@@ -62,6 +61,7 @@ namespace _Main.Scripts.BaseGame.Models
                 dir = (m_pathPoints[m_indexPathPoints] - position).normalized;
             
             transform.Translate(dir * (data.enemiesTierDatas[index].Speed * Time.deltaTime));
+
         }
 
         #region IDamageable
@@ -69,27 +69,27 @@ namespace _Main.Scripts.BaseGame.Models
             public Transform GetTransform() => transform;
             public ulong GetObjId() => NetworkObjectId;
 
-            public void DoDamage(int damage)
+            public void DoDamage(ulong attackerId, int damage)
             {
                 m_healthController?.TakeDamage(damage);
                 
-                if (m_healthController?.Hp <= 0)  LowerTier();
+                if (m_healthController?.Hp <= 0)  LowerTier(attackerId);
             }
 
             public void Heal(int healAmount) => m_healthController?.HealHp(healAmount);
 
         #endregion
         
-        private void LowerTier()
+        private void LowerTier(ulong attackerId)
         {
             index--;
             
             if (index < 0)
             {
-                OnDie();
+                OnDie(attackerId);
                 return;
             }
-            GameManager.Instance.OnChangeMoney.Invoke(5);
+            MasterManager.Instance.RequestChangeMoneyServerRpc(attackerId, 5);
             ChangeStats();
         }
         
@@ -99,9 +99,9 @@ namespace _Main.Scripts.BaseGame.Models
             m_currLife = data.enemiesTierDatas[index].MaxHealth;
             m_sprite.sprite = data.enemiesTierDatas[index].Sprite;
         }
-        private void OnDie()
+        private void OnDie(ulong attackerId)
         {
-            GameManager.Instance.OnChangeMoney.Invoke(10);
+            MasterManager.Instance.RequestChangeMoneyServerRpc(attackerId, 5);
             RequestDestroyObjServerRpc();
         }
 
@@ -112,9 +112,6 @@ namespace _Main.Scripts.BaseGame.Models
             Destroy(this.gameObject);
         }
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref m_currLife);
-        }
+        
     }
 }

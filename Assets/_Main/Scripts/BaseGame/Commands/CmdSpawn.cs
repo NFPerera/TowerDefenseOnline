@@ -34,7 +34,7 @@ namespace _Main.Scripts.BaseGame.Commands
         {
             if (m_instance.TryGetComponent(out TowerModel towerModel))
             {
-                GameManager.Instance.OnChangeMoney(towerModel.GetData().Cost);
+                MasterManager.Instance.RequestChangeMoneyServerRpc(m_requesterId, towerModel.GetData().Cost);
             }
             
             Object.Destroy(m_instance); 
