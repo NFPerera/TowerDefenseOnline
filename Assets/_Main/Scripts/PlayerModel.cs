@@ -1,7 +1,13 @@
 using System.Collections.Generic;
 using _Main.Scripts.BaseGame._Managers;
+using _Main.Scripts.BaseGame.Commands;
+using _Main.Scripts.BaseGame.Models;
+using _Main.Scripts.DevelopmentUtilities;
+using _Main.Scripts.DevelopmentUtilities.Extensions;
+using _Main.Scripts.Networking;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace _Main.Scripts
 {
@@ -16,8 +22,10 @@ namespace _Main.Scripts
         public string PlayersName => m_playersName;
         private string m_playersName;
 
+        private SpawnableNetworkObject m_towerToBuild;
         private UIManager m_myUiManager;
-
+        private Camera m_mainCamera;
+        private Vector2 m_mousePosition;
         public override void OnNetworkSpawn()
         {
             m_myUiManager = FindFirstObjectByType<UIManager>();
@@ -32,9 +40,9 @@ namespace _Main.Scripts
             }
 
             m_myId = NetworkManager.Singleton.LocalClientId;
-            
-            
-            Debug.Log($"Start Playermodel, ui: {m_myUiManager != null}");
+            m_mainCamera = Camera.main;
+            InputManager.Instance.SubscribeInput("MousePos", OnMouseMovement);
+            InputManager.Instance.SubscribeInput("LeftClick", OnLeftClick);
         }
 
         public void SetPlayersName(string p_s) => m_playersName = p_s;
@@ -57,7 +65,31 @@ namespace _Main.Scripts
             return false;
         }
 
+        private void OnMouseMovement(InputAction.CallbackContext obj)
+        {
+            m_mousePosition = obj.ReadValue<Vector2>();
+        }
         
+        private void OnLeftClick(InputAction.CallbackContext obj)
+        {
+            if(m_towerToBuild == null) return;
+            Debug.Log($"right button pressed");
+            var pos = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
+            CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_myId, pos.XY0());
+            
+            GameManager.Instance.AddEventQueue(cmdSpawn);
+            GameManager.Instance.AddSellEvent(cmdSpawn);
+            
+            MasterManager.Instance.RequestChangeMoneyServerRpc(m_myId, -m_towerToBuild.GetComponent<TowerModel>().GetData().Cost);
+            m_towerToBuild = null;
+        }
+        
+        [ClientRpc]
+        public void SetTowerToBuildClientRpc(int id)
+        {
+            
+            m_towerToBuild = MasterManager.Instance.networkObjects[id].GetComponent<TowerModel>();
+        }
 
         [ClientRpc]
         public void RequestChangeMoneyClientRpc(int money, ClientRpcParams p)

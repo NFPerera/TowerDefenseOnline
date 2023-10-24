@@ -24,7 +24,7 @@ namespace _Main.Scripts.Networking
         
         [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private List<NetworkObject> SpawnableNetworkObjects = new List<NetworkObject>();
-        
+        public List<NetworkObject> networkObjects = new List<NetworkObject>();
         public static MasterManager Instance => m_instance;
         private static MasterManager m_instance;
 
@@ -48,6 +48,7 @@ namespace _Main.Scripts.Networking
 
             m_lifePoints = MaxLifePoints;
             OnChangeLifePoints += OnLooseLifePoints;
+            networkObjects = SpawnableNetworkObjects;
         }
 
         public override void OnNetworkSpawn()
@@ -339,10 +340,7 @@ namespace _Main.Scripts.Networking
                 Debug.Log($"Buyer: {buyerId} Money: {m_playerDic[buyerId].Model.GetMoney()}, cost: {towerCost} ServerCheck {m_playerDic[buyerId].Model.GetMoney() > towerCost}");
                 if (m_playerDic[buyerId].Model.GetMoney() > towerCost)
                 {
-                    BuildManager.Instance.SetTowerToBuild(SpawnableNetworkObjects[towerId].GetComponent<SpawnableNetworkObject>());
-
-                    //var diff = m_playerDic[buyerId].Model.GetMoney() - towerCost;
-                    //RequestChangeMoneyServerRpc(buyerId, diff);
+                    m_playerDic[buyerId].Model.SetTowerToBuildClientRpc(towerId);
                 }
             }
 
