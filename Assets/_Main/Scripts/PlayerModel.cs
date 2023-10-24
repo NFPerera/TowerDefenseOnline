@@ -9,9 +9,7 @@ namespace _Main.Scripts
     {
         private List<NetworkObject> m_ownedObjects = new List<NetworkObject>();
 
-        [field: SerializeField] public int StartMoneyPoints { get; private set; }
 
-        public int PlayersMoney => m_playersMoney;
         private int m_playersMoney;
         private ulong m_myId;
 
@@ -19,6 +17,12 @@ namespace _Main.Scripts
         private string m_playersName;
 
         private UIManager m_myUiManager;
+
+        public override void OnNetworkSpawn()
+        {
+            m_myUiManager = FindFirstObjectByType<UIManager>();
+        }
+
         private void Start()
         {
             if (NetworkManager.Singleton.IsServer)
@@ -28,9 +32,9 @@ namespace _Main.Scripts
             }
 
             m_myId = NetworkManager.Singleton.LocalClientId;
-            m_playersMoney = StartMoneyPoints;
-            m_myUiManager = FindFirstObjectByType<UIManager>();
-            m_myUiManager.UpdateMoneyText(m_playersMoney);
+            
+            
+            Debug.Log($"Start Playermodel, ui: {m_myUiManager != null}");
         }
 
         public void SetPlayersName(string p_s) => m_playersName = p_s;
@@ -53,12 +57,17 @@ namespace _Main.Scripts
             return false;
         }
 
-        public void AddMoney(int money)
+        
+
+        [ClientRpc]
+        public void RequestChangeMoneyClientRpc(int money, ClientRpcParams p)
         {
-            m_playersMoney += money;
-            m_myUiManager.UpdateMoneyText(m_playersMoney);
+            m_playersMoney = money;
+            
+            if(!IsServer)
+                m_myUiManager.UpdateMoneyText(m_playersMoney);
         }
-        
-        
+        public int GetMoney() => m_playersMoney;
+
     }
 }

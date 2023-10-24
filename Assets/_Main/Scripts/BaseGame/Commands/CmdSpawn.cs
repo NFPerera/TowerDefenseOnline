@@ -27,14 +27,13 @@ namespace _Main.Scripts.BaseGame.Commands
         
         public void Execute()
         {
-            //m_instance = m_gameObjectFactory.Create(m_prefab);
             MasterManager.Instance.RequestSpawnGameObjectServerRpc(m_requesterId, m_prefab.SpawnObjectId, m_position);
         }
         public void Undo()
         {
             if (m_instance.TryGetComponent(out TowerModel towerModel))
             {
-                MasterManager.Instance.RequestChangeMoneyServerRpc(m_requesterId, towerModel.GetData().Cost);
+                MasterManager.Instance.RequestChangeMoneyServerRpc(m_requesterId, +towerModel.GetData().Cost);
             }
             
             Object.Destroy(m_instance); 

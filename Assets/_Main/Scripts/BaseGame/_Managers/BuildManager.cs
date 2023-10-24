@@ -1,4 +1,5 @@
 ﻿using _Main.Scripts.BaseGame.Commands;
+using _Main.Scripts.BaseGame.Models;
 using _Main.Scripts.DevelopmentUtilities;
 using _Main.Scripts.DevelopmentUtilities.Extensions;
 using _Main.Scripts.Networking;
@@ -40,13 +41,14 @@ namespace _Main.Scripts.BaseGame._Managers
         private void OnLeftClick(InputAction.CallbackContext obj)
         {
             if(m_towerToBuild == null) return;
-            
+            Debug.Log($"right button pressed");
             var pos = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
             CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_id, pos.XY0());
             
             GameManager.Instance.AddEventQueue(cmdSpawn);
             GameManager.Instance.AddSellEvent(cmdSpawn);
             
+            MasterManager.Instance.RequestChangeMoneyServerRpc(m_id, -m_towerToBuild.GetComponent<TowerModel>().GetData().Cost);
             m_towerToBuild = null;
         }
 

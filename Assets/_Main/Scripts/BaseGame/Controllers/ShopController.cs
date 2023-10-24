@@ -12,16 +12,10 @@ namespace _Main.Scripts.BaseGame.Controllers
         public void OnButtonDownBuyTower(SpawnableNetworkObject p_tower)
         {
             var towerCost = p_tower.GetComponent<TowerModel>().GetData().Cost;
-            //COMO SE QUIEN ESTA APRETANDO EL BOTON??????
-            var myMoney = MasterManager.Instance.GetPlayersCurrMoney(NetworkManager.Singleton.LocalClientId);
-            if (towerCost <= myMoney)
-                BuyTower(p_tower);
+            var myID = NetworkManager.Singleton.LocalClientId; 
+            
+            MasterManager.Instance.RequestBuyTowerServerRpc(myID, p_tower.SpawnObjectId,towerCost);
         }
-        private void BuyTower(SpawnableNetworkObject tower)
-        {
-            var towerCost = tower.GetComponent<TowerModel>().GetData().Cost;
-            BuildManager.Instance.SetTowerToBuild(tower);
-            MasterManager.Instance.RequestChangeMoneyServerRpc(NetworkManager.Singleton.LocalClientId, towerCost);
-        } 
+        
     }
 }

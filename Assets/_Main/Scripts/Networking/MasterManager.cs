@@ -80,6 +80,7 @@ namespace _Main.Scripts.Networking
         public void RequestSpawnPlayerDicServerRpc(ulong id)
         {
             var obj = Instantiate<NetworkObject>(playerPrefab);
+            
             obj.Spawn();
             
             
@@ -91,6 +92,9 @@ namespace _Main.Scripts.Networking
             {
                 m_playerDic[id] = new PlayerData();
                 m_playerDic[id].Model = obj.GetComponent<PlayerModel>();
+
+                RequestChangeMoneyServerRpc(id, 1000);
+                Debug.Log($"Added Playermodel {id}");
             }
         }
 
@@ -314,7 +318,12 @@ namespace _Main.Scripts.Networking
             [ServerRpc(RequireOwnership = false)]
             public void RequestChangeMoneyServerRpc(ulong affectedPlayer, int moneyChange)
             {
-                m_playerDic[affectedPlayer].Model.AddMoney(moneyChange);
+                var p = new ClientRpcParams();
+                p.Send.TargetClientIds = new ulong[]{affectedPlayer,m_serverId};
+                var model = m_playerDic[affectedPlayer].Model;
+
+                var diff = model.GetMoney() + moneyChange;
+                m_playerDic[affectedPlayer].Model.RequestChangeMoneyClientRpc(diff,p);
             }
             
             private void OnLooseLifePoints(int lifeChange)
@@ -324,8 +333,21 @@ namespace _Main.Scripts.Networking
                 if (m_lifePoints <= 0) LoseGame();
             }
 
+            [ServerRpc(RequireOwnership = false)]
+            public void RequestBuyTowerServerRpc(ulong buyerId,int towerId, int towerCost)
+            {
+                Debug.Log($"Buyer: {buyerId} Money: {m_playerDic[buyerId].Model.GetMoney()}, cost: {towerCost} ServerCheck {m_playerDic[buyerId].Model.GetMoney() > towerCost}");
+                if (m_playerDic[buyerId].Model.GetMoney() > towerCost)
+                {
+                    BuildManager.Instance.SetTowerToBuild(SpawnableNetworkObjects[towerId].GetComponent<SpawnableNetworkObject>());
 
-            public int GetPlayersCurrMoney(ulong playersId) => m_playerDic[playersId].Model.PlayersMoney;
+                    //var diff = m_playerDic[buyerId].Model.GetMoney() - towerCost;
+                    //RequestChangeMoneyServerRpc(buyerId, diff);
+                }
+            }
+
+             
+            public int GetPlayersCurrMoney(ulong playersId) => m_playerDic[playersId].Model.GetMoney();
             public int GetLifePoints() => m_lifePoints;
             
             

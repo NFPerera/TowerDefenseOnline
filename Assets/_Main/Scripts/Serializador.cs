@@ -25,9 +25,6 @@ namespace _Main.Scripts
         public static void DeSerializeDic(string json, Dictionary<ulong, MasterManager.RoomData> dic)
         {
             var data = JsonUtility.FromJson<DictionarySerializer>(json);
-            Debug.Log(json);
-            Debug.Log($"Keys Count = {data.keys.Count} ");
-            Debug.Log($"Data Count = {data.values.Count} ");
             for (int i = 0; i < data.keys.Count; i++)
             {
                 dic[data.keys[i]] = data.values[i];
