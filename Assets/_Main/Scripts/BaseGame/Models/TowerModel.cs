@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.BaseGame.Interfaces.TowerInterfaces;
 using _Main.Scripts.BaseGame.ScriptableObjects.Towers;
@@ -14,6 +15,13 @@ namespace _Main.Scripts.BaseGame.Models
 
         private List<EnemyModel> m_enemiesInRange = new List<EnemyModel>();
         private float m_timer;
+
+
+        private void Start()
+        {
+            Debug.Log($"My owner is; {MyOwnerId}");
+        }
+
         private void Update()
         {
             m_timer += Time.deltaTime;

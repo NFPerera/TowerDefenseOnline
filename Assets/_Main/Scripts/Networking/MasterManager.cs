@@ -19,6 +19,7 @@ namespace _Main.Scripts.Networking
         {
             public string PlayersName;
             public PlayerModel Model;
+            public List<NetworkObject> PlayersObj = new List<NetworkObject>();
         }
         
         
@@ -103,12 +104,15 @@ namespace _Main.Scripts.Networking
         public void RequestSpawnGameObjectServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos)
         {
             var obj = Instantiate<NetworkObject>(SpawnableNetworkObjects[spawnObjectId]) ;
+
             obj.transform.position = pos;
             obj.Spawn();
-
+            
             if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
             {
-                spawnableNetworkObject.SetOwnerId(p_OwnerId);
+                var p = new ClientRpcParams();
+                p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
+                spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
             }
 
             if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
@@ -116,8 +120,10 @@ namespace _Main.Scripts.Networking
                 m_serverObj.Add(obj);
                 return;
             }
+            m_playerDic[p_OwnerId].PlayersObj.Add(obj);
+            m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
             
-            m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj);
+            
         }
         
         [ServerRpc(RequireOwnership = false)]
@@ -137,8 +143,19 @@ namespace _Main.Scripts.Networking
             }
 
 
-            m_playerDic[ownerId].Model.TryGetOwnedObject(networkObjId, out var obj);
-            obj.Despawn();
+            m_playerDic[ownerId].Model.TryGetOwnedObject(networkObjId, out var objId);
+
+            foreach (var obj in m_playerDic[ownerId].PlayersObj)
+            {
+                if ((obj.NetworkObjectId == objId))
+                {
+                    m_playerDic[ownerId].PlayersObj.Remove(obj);
+                    m_playerDic[ownerId].Model.RemoveObjectToOwnerList(obj.NetworkObjectId);
+                    obj.Despawn();
+                    
+                    break;
+                }
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -150,10 +167,12 @@ namespace _Main.Scripts.Networking
 
             if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
             {
-                spawnableNetworkObject.SetOwnerId(p_OwnerId);
+                var p = new ClientRpcParams();
+                p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
+                spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
             }
-
-            m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj);
+            m_playerDic[p_OwnerId].PlayersObj.Add(obj);
+            m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
 
             //TODO: Preguntarle a Seba como hacer esto mas performante
             //No me gusta que cada vez que se spawnee una bala tenga que buscar en toda la lista de objetos
@@ -174,10 +193,18 @@ namespace _Main.Scripts.Networking
         [ServerRpc(RequireOwnership = false)]
         public void RequestMoveCommandServerRpc(ulong p_ownerId, ulong p_objId, Vector3 p_dir, float p_speed)
         {
-            var model = m_playerDic[p_ownerId].Model;
-            if (model.TryGetOwnedObject(p_objId, out var networkObject))
+            var data = m_playerDic[p_ownerId];
+            if (data.Model.TryGetOwnedObject(p_objId, out var id))
             {
-                networkObject.transform.position += p_dir * (p_speed * Time.deltaTime);
+                NetworkObject networkObj = default; 
+                foreach (var obj in data.PlayersObj)
+                {
+                    if (obj.NetworkObjectId == id)
+                        networkObj = obj;
+                }
+
+                if (networkObj != null) 
+                    networkObj.transform.position += p_dir * (p_speed * Time.deltaTime);
             }
             
         }

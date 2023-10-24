@@ -9,6 +9,12 @@ namespace _Main.Scripts.Networking
 
         public int SpawnObjectId => spawnObjectId;
         public ulong MyOwnerId { get; private set; }
-        public void SetOwnerId(ulong p_ownerId) => MyOwnerId = p_ownerId;
+        
+        [ClientRpc]
+        public void SetOwnerIdClientRpc(ulong ownerId, ClientRpcParams p)
+        {
+            Debug.Log($"SET OWNERRSHIP: {ownerId}");
+            MyOwnerId = ownerId;
+        }
     }
 }

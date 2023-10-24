@@ -22,6 +22,7 @@ namespace _Main.Scripts.BaseGame.Models
         private float m_speed;
         private int m_indexPathPoints;
         private int m_currLife;
+        private bool m_isAlive;
         private void Awake()
         {
             foreach (var trans in GameManager.Instance.PathPoints)
@@ -33,11 +34,15 @@ namespace _Main.Scripts.BaseGame.Models
 
             m_sprite = gameObject.GetComponent<SpriteRenderer>();
             m_sprite.sprite = data.enemiesTierDatas[index].Sprite;
+            m_isAlive = true;
         }
 
 
         private void Update()
         {
+            if(!m_isAlive)
+                return;
+            
             var position = transform.position;
             var distanceToTarget = Vector2.Distance(position, m_pathPoints[m_indexPathPoints < m_pathPoints.Count? m_indexPathPoints : 0]);
             var dir = Vector3.zero;
@@ -49,7 +54,6 @@ namespace _Main.Scripts.BaseGame.Models
                 if (m_indexPathPoints >= m_pathPoints.Count)
                 {
                     MasterManager.Instance.OnChangeLifePoints.Invoke(index+ 1);
-                    //Destroy(gameObject);
                     MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, NetworkObjectId);
                     return;
                 }
@@ -101,16 +105,11 @@ namespace _Main.Scripts.BaseGame.Models
         }
         private void OnDie(ulong attackerId)
         {
+            m_isAlive = false;
             MasterManager.Instance.RequestChangeMoneyServerRpc(attackerId, 5);
-            RequestDestroyObjServerRpc();
+            MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, NetworkObjectId);
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void RequestDestroyObjServerRpc()
-        {
-            //PORQUEEEEEEE ME TIRA QUE NO DEBERRIA DESTRUIRLO?????????
-            Destroy(this.gameObject);
-        }
 
         
     }

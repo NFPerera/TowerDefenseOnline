@@ -13,7 +13,8 @@ namespace _Main.Scripts
 {
     public class PlayerModel : NetworkBehaviour
     {
-        private List<NetworkObject> m_ownedObjects = new List<NetworkObject>();
+        //private List<NetworkObject> m_ownedObjects = new List<NetworkObject>();
+        private List<ulong> m_ownedObjectsIds = new List<ulong>();
 
 
         private int m_playersMoney;
@@ -40,6 +41,7 @@ namespace _Main.Scripts
             }
 
             m_myId = NetworkManager.Singleton.LocalClientId;
+            Debug.Log($"My ID is: {m_myId}");
             m_mainCamera = Camera.main;
             InputManager.Instance.SubscribeInput("MousePos", OnMouseMovement);
             InputManager.Instance.SubscribeInput("LeftClick", OnLeftClick);
@@ -47,21 +49,21 @@ namespace _Main.Scripts
 
         public void SetPlayersName(string p_s) => m_playersName = p_s;
 
-        public void AddObjectToOwnerList(NetworkObject o) => m_ownedObjects.Add(o);
-        public void RemoveObjectToOwnerList(NetworkObject o) => m_ownedObjects.Remove(o);
+        public void AddObjectToOwnerList(ulong o) => m_ownedObjectsIds.Add(o);
+        public void RemoveObjectToOwnerList(ulong o) => m_ownedObjectsIds.Remove(o);
 
-        public bool TryGetOwnedObject(ulong p_objId, out NetworkObject networkObject)
+        public bool TryGetOwnedObject(ulong p_objId, out ulong networkObjectId)
         {
-            foreach (var obj in m_ownedObjects)
+            foreach (var id in m_ownedObjectsIds)
             {
-                if (p_objId == obj.NetworkObjectId)
+                if (p_objId == id)
                 {
-                    networkObject = obj;
+                    networkObjectId = id;
                     return true;
                 }
             }
 
-            networkObject = default;
+            networkObjectId = default;
             return false;
         }
 
@@ -73,7 +75,7 @@ namespace _Main.Scripts
         private void OnLeftClick(InputAction.CallbackContext obj)
         {
             if(m_towerToBuild == null) return;
-            Debug.Log($"right button pressed");
+            
             var pos = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
             CmdSpawn cmdSpawn = new CmdSpawn(m_towerToBuild,m_myId, pos.XY0());
             
