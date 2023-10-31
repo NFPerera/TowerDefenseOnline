@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PatFustyPortrait_1_0: -5822111649759189918
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

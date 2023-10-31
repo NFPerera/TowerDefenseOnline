@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SaudaPortrait_0: -6858735238018475004
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Main.Scripts.BaseGame._Managers;
 using _Main.Scripts.BaseGame.Commands;
@@ -25,11 +26,19 @@ namespace _Main.Scripts
 
         private SpawnableNetworkObject m_towerToBuild;
         private UIManager m_myUiManager;
+        private ChatManager m_myChatManager;
         private Camera m_mainCamera;
         private Vector2 m_mousePosition;
+
+        private void Awake()
+        {
+            m_myChatManager = FindFirstObjectByType<ChatManager>();
+        }
+
         public override void OnNetworkSpawn()
         {
             m_myUiManager = FindFirstObjectByType<UIManager>();
+            //m_myChatManager = FindFirstObjectByType<ChatManager>();
         }
 
         private void Start()
@@ -40,9 +49,17 @@ namespace _Main.Scripts
                 return;
             }
 
+
             m_myId = NetworkManager.Singleton.LocalClientId;
+            m_playersName = MasterManager.Instance.GetRoomData(m_myId).Name;
             Debug.Log($"My ID is: {m_myId}");
             m_mainCamera = Camera.main;
+            m_myChatManager.RegisterUserServerRpc(m_myId, m_playersName);
+            // if (m_myId <= 1)
+            // {
+            //     m_myChatManager.AddToChannelServerRpc(m_myId, "Test");
+            // }
+            //MasterManager.Instance.GetChatManager().RegisterUserServerRpc(m_myId, m_playersName);
             InputManager.Instance.SubscribeInput("MousePos", OnMouseMovement);
             InputManager.Instance.SubscribeInput("LeftClick", OnLeftClick);
         }

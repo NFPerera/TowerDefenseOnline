@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      QuincyPortrait_0: 1453999107635977236
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

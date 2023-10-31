@@ -104,6 +104,7 @@ namespace _Main.Scripts.Menus
         public void OnChangeUserName()
         {
             playersName = inputFieldName.text;
+            PlayerPrefs.SetString("Nickname", playersName);
             // var id = NetworkManager.Singleton.LocalClientId;
             // MasterManager.Instance.SetPlayersNameServerRpc(id, playersName);
         }
