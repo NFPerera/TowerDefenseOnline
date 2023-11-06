@@ -27,7 +27,7 @@ public class ChatManager : NetworkBehaviour
 
     void GenerateCommands()
     {
-        _commands["r/"] = DMCommand;
+        _commands["/r"] = DMCommand;
     }
 
     [ServerRpc(RequireOwnership = false)]

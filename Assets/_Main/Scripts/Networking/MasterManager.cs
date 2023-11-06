@@ -114,12 +114,16 @@ namespace _Main.Scripts.Networking
                 p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
                 spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
             }
+            print("Request Spawn");
 
             if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
             {
+                print("Request Spawn 2");
                 m_serverObj.Add(obj);
                 return;
             }
+
+            
             m_playerDic[p_OwnerId].PlayersObj.Add(obj);
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
             
@@ -129,6 +133,7 @@ namespace _Main.Scripts.Networking
         [ServerRpc(RequireOwnership = false)]
         public void RequestDespawnGameObjectServerRpc(ulong ownerId,ulong networkObjId)
         {
+            print("Aguante crash");
 
             if (ownerId == m_serverId)
             {
@@ -138,6 +143,7 @@ namespace _Main.Scripts.Networking
                         return;
                     
                     networkObject.Despawn();
+                    print("hola");
                 }
                 return;
             }
@@ -152,7 +158,7 @@ namespace _Main.Scripts.Networking
                     m_playerDic[ownerId].PlayersObj.Remove(obj);
                     m_playerDic[ownerId].Model.RemoveObjectToOwnerList(obj.NetworkObjectId);
                     obj.Despawn();
-                    
+                    print("chau");
                     break;
                 }
             }
@@ -171,6 +177,9 @@ namespace _Main.Scripts.Networking
                 p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
                 spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
             }
+            //TODO: comprobar que haya una key en el diccionario para que haya un p_OwnerId
+            //TODO: Comprobar si el ownerID == serverID no agregarlo en el diccionario, sino en la lista de objetos del servidor "m_serverObj"
+            
             m_playerDic[p_OwnerId].PlayersObj.Add(obj);
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
 
