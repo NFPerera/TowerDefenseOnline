@@ -40,7 +40,8 @@ namespace _Main.Scripts.BaseGame.Models
                 m_cmdMove.Execute();
                 //GameManager.Instance.AddEventQueue(_cmdMove);
             }
-            else Destroy(gameObject);
+            else
+                MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, m_objId);
         }
 
         private void OnTriggerEnter2D(Collider2D col)

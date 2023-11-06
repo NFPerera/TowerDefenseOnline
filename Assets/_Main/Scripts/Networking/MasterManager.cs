@@ -92,9 +92,9 @@ namespace _Main.Scripts.Networking
             }
             else
             {
-                m_playerDic[id] = new PlayerData();
-                m_playerDic[id].Model = obj.GetComponent<PlayerModel>();
-
+                var data = new PlayerData();
+                data.Model = obj.GetComponent<PlayerModel>();
+                m_playerDic.Add(id, data);
                 RequestChangeMoneyServerRpc(id, 1000);
                 Debug.Log($"Added Playermodel {id}");
             }

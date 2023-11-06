@@ -25,7 +25,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
             //var bullet = Instantiate(data.BulletPrefabs, model.GetShootPoint().position, Quaternion.identity);
             var bul = data.BulletPrefabs;
             
-            MasterManager.Instance.RequestSpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bul.SpawnObjectId, 
+            MasterManager.Instance.RequestSpawnBulletServerRpc(model.MyOwnerId, bul.SpawnObjectId, 
                 model.GetShootPoint().position, firstEnemyInRange.NetworkObjectId);
             //bullet.InitializeBullet(firstEnemyInRange.GetTransform(), data.Damage);
         }
