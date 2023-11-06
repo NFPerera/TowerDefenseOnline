@@ -303,6 +303,8 @@ namespace _Main.Scripts.Networking
                 Serializador.DeSerializeDic(json, m_roomDatas);
                 RefreshWaitingRoomView();
             }
+
+            public RoomData GetRoomData(ulong id) => m_roomDatas[id];
         
         #endregion
 
@@ -314,14 +316,20 @@ namespace _Main.Scripts.Networking
             private int m_lifePoints;
             
             private WaveController m_waveController;
-            
+            // private ChatManager m_chat;
+            // public ChatManager GetChatManager() => m_chat;
             
             public Action<int> OnChangeLifePoints;
-            public void SearchWaveController()
+            public void SetWaveController(WaveController waveController)
             {
-                m_waveController = FindFirstObjectByType<WaveController>();
+                m_waveController = waveController;
                 m_waveController.OnFinishWave += RequestEnableWaveButtonsClientRpc;
             }
+            
+            // public void SetChatManager(ChatManager chatManager)
+            // {
+            //     m_chat = chatManager;
+            // }
             
             [ServerRpc(RequireOwnership = false)]
             public void RequestActivateWaveServerRpc() 
