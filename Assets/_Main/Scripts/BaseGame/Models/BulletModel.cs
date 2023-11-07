@@ -38,7 +38,6 @@ namespace _Main.Scripts.BaseGame.Models
             if (!m_reachTarget && m_target != null)
             {
                 m_cmdMove.Execute();
-                //GameManager.Instance.AddEventQueue(_cmdMove);
             }
             else
                 MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, m_objId);

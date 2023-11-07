@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3001051302345251190}
   - component: {fileID: 2846105271280436775}
-  - component: {fileID: 3934935501648032689}
   - component: {fileID: 4920725700552408709}
   - component: {fileID: 6389742434675861703}
   m_Layer: 0
@@ -63,18 +62,6 @@ MonoBehaviour:
   - {fileID: 0}
   mainCamera: {fileID: 0}
   waveButton: {fileID: 0}
---- !u!114 &3934935501648032689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872108984745357167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33611b8f747545a88b308bb49968a355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4920725700552408709
 MonoBehaviour:
   m_ObjectHideFlags: 0

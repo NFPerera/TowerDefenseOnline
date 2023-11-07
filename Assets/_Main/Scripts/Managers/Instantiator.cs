@@ -18,7 +18,6 @@ namespace _Main.Scripts.Managers
             }
             else
             {
-                Debug.Log($"SpawnDel waveecontroller");
                 var ins = Instantiate(waveController);
                 ins.Spawn();
                 MasterManager.Instance.SearchWaveController();

@@ -13,7 +13,6 @@ namespace _Main.Scripts.Networking
         [ClientRpc]
         public void SetOwnerIdClientRpc(ulong ownerId, ClientRpcParams p)
         {
-            Debug.Log($"SET OWNERRSHIP: {ownerId}");
             MyOwnerId = ownerId;
         }
     }

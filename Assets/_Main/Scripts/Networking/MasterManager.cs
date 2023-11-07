@@ -96,47 +96,56 @@ namespace _Main.Scripts.Networking
                 data.Model = obj.GetComponent<PlayerModel>();
                 m_playerDic.Add(id, data);
                 RequestChangeMoneyServerRpc(id, 1000);
-                Debug.Log($"Added Playermodel {id}");
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void RequestSpawnGameObjectServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos)
         {
+            Debug.Log($"TrySpawn");
             var obj = Instantiate<NetworkObject>(SpawnableNetworkObjects[spawnObjectId]) ;
 
             obj.transform.position = pos;
             obj.Spawn();
             
+            
+            
             if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
             {
+                
+                
+                
                 var p = new ClientRpcParams();
                 p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
                 spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
+                if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
+                {
+                    Debug.Log($"Spawn to server");
+                    m_serverObj.Add(obj);
+                    return;
+                }
+                
             }
 
-            if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
-            {
-                m_serverObj.Add(obj);
-                return;
-            }
+            
             m_playerDic[p_OwnerId].PlayersObj.Add(obj);
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
-            
+            Debug.Log($"Spawn to playeer");
             
         }
         
         [ServerRpc(RequireOwnership = false)]
         public void RequestDespawnGameObjectServerRpc(ulong ownerId,ulong networkObjId)
         {
-
+            Debug.Log($"TryDespawn; requestId: {ownerId}");
             if (ownerId == m_serverId)
             {
                 foreach (NetworkObject networkObject in m_serverObj)
                 {
-                    if(networkObject.NetworkObjectId != NetworkObjectId)
-                        return;
+                    if(networkObject.NetworkObjectId != networkObjId)
+                        continue;
                     
+                    Debug.Log($"Despawn");
                     networkObject.Despawn();
                 }
                 return;
@@ -152,7 +161,7 @@ namespace _Main.Scripts.Networking
                     m_playerDic[ownerId].PlayersObj.Remove(obj);
                     m_playerDic[ownerId].Model.RemoveObjectToOwnerList(obj.NetworkObjectId);
                     obj.Despawn();
-                    
+                    Debug.Log($"Despawn");
                     break;
                 }
             }
@@ -214,6 +223,9 @@ namespace _Main.Scripts.Networking
         {
             foreach (var obj in m_serverObj)
             {
+                if(obj == default)
+                    continue;
+                
                 if(obj.NetworkObjectId != objId)
                     continue;
                 
@@ -269,7 +281,6 @@ namespace _Main.Scripts.Networking
                 
                 if (m_roomDatas.TryAdd(p_ulong, data))
                 {
-                    Debug.Log($"Players in room: {m_playersCount}");
                     var json = Serializador.SerializeDic(m_roomDatas);
                     RefreshDictionaryClientRpc(json);
                     m_playersCount++;
@@ -364,7 +375,6 @@ namespace _Main.Scripts.Networking
             [ServerRpc(RequireOwnership = false)]
             public void RequestBuyTowerServerRpc(ulong buyerId,int towerId, int towerCost)
             {
-                Debug.Log($"Buyer: {buyerId} Money: {m_playerDic[buyerId].Model.GetMoney()}, cost: {towerCost} ServerCheck {m_playerDic[buyerId].Model.GetMoney() > towerCost}");
                 if (m_playerDic[buyerId].Model.GetMoney() > towerCost)
                 {
                     m_playerDic[buyerId].Model.SetTowerToBuildClientRpc(towerId);

@@ -73,7 +73,6 @@ namespace _Main.Scripts.Menus
             var manager = NetworkManager.Singleton;
             startGameButton.SetActive(manager.IsHost || manager.IsServer);
 
-            Debug.Log($"Creating Server. . . {NetworkManager.Singleton.LocalClientId}");
 
             var obj = Instantiate<NetworkObject>(managerObj);
             obj.Spawn();
