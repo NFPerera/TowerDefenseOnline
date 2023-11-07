@@ -206,21 +206,49 @@ namespace _Main.Scripts.Networking
         public void RequestMoveCommandServerRpc(ulong p_ownerId, ulong p_objId, Vector3 p_dir, float p_speed)
         {
             var data = m_playerDic[p_ownerId];
-            if (data.Model.TryGetOwnedObject(p_objId, out var id))
+            if (data.Model.TryGetOwnedObject(p_objId, out var networkObjectId))
             {
                 NetworkObject networkObj = default; 
                 foreach (var obj in data.PlayersObj)
                 {
-                    if (obj.NetworkObjectId == id)
+                    if (obj.NetworkObjectId == networkObjectId)
                         networkObj = obj;
                 }
 
-                if (networkObj != null) 
-                    networkObj.transform.position += p_dir * (p_speed * Time.deltaTime);
+                if (networkObj == null) 
+                    return;
+                    
+                    
+                networkObj.transform.position += p_dir * (p_speed * Time.deltaTime);
+                Debug.Log($"SE MUEEVE EN EL SERVER");
+                UpdateObjPosClientRpc(p_ownerId, p_objId, networkObj.transform.position);
             }
             
         }
 
+        [ClientRpc]
+        private void UpdateObjPosClientRpc(ulong p_ownerId, ulong p_objId, Vector3 p_newPos)
+        {
+            var data = m_playerDic[p_ownerId];
+            if (data.Model.TryGetOwnedObject(p_objId, out var networkObjectId))
+            {
+                NetworkObject networkObj = default; 
+                foreach (var obj in data.PlayersObj)
+                {
+                    if (obj.NetworkObjectId == networkObjectId)
+                        networkObj = obj;
+                }
+
+                if (networkObj == null) 
+                    return;
+                    
+                    
+                networkObj.transform.position = p_newPos;
+                Debug.Log($"SE MUEEVE EN EL CLIEENTEE");
+                
+            }
+        }
+        
         [ServerRpc(RequireOwnership = false)]
         public void RequestDoDamageServerRpc(ulong objId, ulong attacker,int damage)
         {

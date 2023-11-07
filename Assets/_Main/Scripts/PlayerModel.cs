@@ -55,11 +55,6 @@ namespace _Main.Scripts
             Debug.Log($"My ID is: {m_myId}");
             m_mainCamera = Camera.main;
             m_myChatManager.RegisterUserServerRpc(m_myId, m_playersName);
-            // if (m_myId <= 1)
-            // {
-            //     m_myChatManager.AddToChannelServerRpc(m_myId, "Test");
-            // }
-            //MasterManager.Instance.GetChatManager().RegisterUserServerRpc(m_myId, m_playersName);
             InputManager.Instance.SubscribeInput("MousePos", OnMouseMovement);
             InputManager.Instance.SubscribeInput("LeftClick", OnLeftClick);
         }

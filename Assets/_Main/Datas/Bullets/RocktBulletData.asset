@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: RocktBulletData
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 5
+  <Damage>k__BackingField: 5
   <BulletAttack>k__BackingField: {fileID: 11400000, guid: 27dc242d1990c0d4fba0c9bfa0e96558, type: 2}
   <BulletMovement>k__BackingField: {fileID: 11400000, guid: d9a57b49a44cdcb4d98e126dd119e964, type: 2}

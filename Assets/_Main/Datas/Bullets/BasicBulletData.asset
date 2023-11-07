@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: BasicBulletData
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 5
-  <Sprite>k__BackingField: {fileID: 0}
+  <Damage>k__BackingField: 1
   <BulletAttack>k__BackingField: {fileID: 11400000, guid: cff840a1149b3584eb1d38f1be5fe75e, type: 2}
   <BulletMovement>k__BackingField: {fileID: 11400000, guid: d9a57b49a44cdcb4d98e126dd119e964, type: 2}
