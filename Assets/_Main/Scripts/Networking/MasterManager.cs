@@ -180,6 +180,9 @@ namespace _Main.Scripts.Networking
                 p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
                 spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
             }
+            //TODO: comprobar que haya una key en el diccionario para que haya un p_OwnerId
+            //TODO: Comprobar si el ownerID == serverID no agregarlo en el diccionario, sino en la lista de objetos del servidor "m_serverObj"
+            
             m_playerDic[p_OwnerId].PlayersObj.Add(obj);
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
 
@@ -314,6 +317,8 @@ namespace _Main.Scripts.Networking
                 Serializador.DeSerializeDic(json, m_roomDatas);
                 RefreshWaitingRoomView();
             }
+
+            public RoomData GetRoomData(ulong id) => m_roomDatas[id];
         
         #endregion
 
@@ -325,14 +330,20 @@ namespace _Main.Scripts.Networking
             private int m_lifePoints;
             
             private WaveController m_waveController;
-            
+            // private ChatManager m_chat;
+            // public ChatManager GetChatManager() => m_chat;
             
             public Action<int> OnChangeLifePoints;
-            public void SearchWaveController()
+            public void SetWaveController(WaveController waveController)
             {
-                m_waveController = FindFirstObjectByType<WaveController>();
+                m_waveController = waveController;
                 m_waveController.OnFinishWave += RequestEnableWaveButtonsClientRpc;
             }
+            
+            // public void SetChatManager(ChatManager chatManager)
+            // {
+            //     m_chat = chatManager;
+            // }
             
             [ServerRpc(RequireOwnership = false)]
             public void RequestActivateWaveServerRpc() 

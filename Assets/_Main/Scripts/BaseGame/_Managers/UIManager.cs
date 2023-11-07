@@ -22,7 +22,8 @@ namespace _Main.Scripts.BaseGame._Managers
         [Header("Texts")] 
         [SerializeField] private TextMeshProUGUI lifeText;
         [SerializeField] private TextMeshProUGUI moneyText;
-        
+
+        public ChatManager chat;
         
         //TODO: Cambiar screens por escenas distintas
         [Header("Screens")]
