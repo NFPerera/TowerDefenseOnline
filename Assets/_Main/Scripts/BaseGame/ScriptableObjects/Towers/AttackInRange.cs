@@ -38,7 +38,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
             Vector3 aimDirection= (enemyPosition - model.transform.position).normalized;
             float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
-            model.transform.eulerAngles = new Vector3(0, 0, aimAngle);
+            model.towerBody.transform.eulerAngles = new Vector3(0, 0, aimAngle);
         }
     }
 }

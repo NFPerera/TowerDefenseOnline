@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using _Main.Scripts.BaseGame._Managers;
-using _Main.Scripts.BaseGame.Clases;
 using _Main.Scripts.BaseGame.Interfaces.EnemiesInterfaces;
 using _Main.Scripts.Networking;
 using Clases;
 using Enemies;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.Models
@@ -14,10 +12,9 @@ namespace _Main.Scripts.BaseGame.Models
     {
         [SerializeField] private EnemyData data;
         [SerializeField] private int index;
-        
+        [SerializeField]private SpriteRenderer sprite;
         
         private HealthController m_healthController;
-        private SpriteRenderer m_sprite;
         private List<Vector3> m_pathPoints = new List<Vector3>();
         private float m_speed;
         private int m_indexPathPoints;
@@ -32,8 +29,7 @@ namespace _Main.Scripts.BaseGame.Models
             
             m_healthController = new HealthController(data.enemiesTierDatas[index].MaxHealth);
 
-            m_sprite = gameObject.GetComponent<SpriteRenderer>();
-            m_sprite.sprite = data.enemiesTierDatas[index].Sprite;
+            sprite.sprite = data.enemiesTierDatas[index].Sprite;
             m_isAlive = true;
         }
 
@@ -77,6 +73,7 @@ namespace _Main.Scripts.BaseGame.Models
             {
                 m_healthController?.TakeDamage(damage);
                 
+                
                 if (m_healthController?.Hp <= 0)  LowerTier(attackerId);
             }
 
@@ -101,7 +98,7 @@ namespace _Main.Scripts.BaseGame.Models
         {
             m_healthController = new HealthController(data.enemiesTierDatas[index].MaxHealth);
             m_currLife = data.enemiesTierDatas[index].MaxHealth;
-            m_sprite.sprite = data.enemiesTierDatas[index].Sprite;
+            sprite.sprite = data.enemiesTierDatas[index].Sprite;
         }
         private void OnDie(ulong attackerId)
         {

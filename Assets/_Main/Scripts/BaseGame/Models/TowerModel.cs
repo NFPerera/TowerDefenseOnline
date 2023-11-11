@@ -12,7 +12,7 @@ namespace _Main.Scripts.BaseGame.Models
     {
         [SerializeField] private TowerData data;
         [SerializeField] private Transform shootPoint;
-
+        public GameObject towerBody;
         private List<EnemyModel> m_enemiesInRange = new List<EnemyModel>();
         private float m_timer;
 
