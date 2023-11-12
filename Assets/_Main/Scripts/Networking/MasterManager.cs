@@ -102,42 +102,30 @@ namespace _Main.Scripts.Networking
         [ServerRpc(RequireOwnership = false)]
         public void RequestSpawnGameObjectServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos)
         {
-            Debug.Log($"TrySpawn");
             var obj = Instantiate<NetworkObject>(SpawnableNetworkObjects[spawnObjectId]) ;
-
+            
+            
+            if (!obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
+                return;
+            
             obj.transform.position = pos;
             obj.Spawn();
+            spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId);
             
-            
-            
-            if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
+            if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
             {
-                
-                
-                
-                var p = new ClientRpcParams();
-                p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
-                spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
-                if (p_OwnerId == NetworkManager.Singleton.LocalClientId)
-                {
-                    Debug.Log($"Spawn to server");
-                    m_serverObj.Add(obj);
-                    return;
-                }
-                
+                m_serverObj.Add(obj);
             }
-
-            
-            m_playerDic[p_OwnerId].PlayersObj.Add(obj);
-            m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
-            Debug.Log($"Spawn to playeer");
-            
+            else
+            {
+                m_playerDic[p_OwnerId].PlayersObj.Add(obj);
+                m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
+            }
         }
         
         [ServerRpc(RequireOwnership = false)]
         public void RequestDespawnGameObjectServerRpc(ulong ownerId,ulong networkObjId)
         {
-            Debug.Log($"TryDespawn; requestId: {ownerId}");
             if (ownerId == m_serverId)
             {
                 foreach (NetworkObject networkObject in m_serverObj)
@@ -145,7 +133,7 @@ namespace _Main.Scripts.Networking
                     if(networkObject.NetworkObjectId != networkObjId)
                         continue;
                     
-                    Debug.Log($"Despawn");
+                    Debug.Log($"Server Despawn");
                     networkObject.Despawn();
                 }
                 return;
@@ -161,14 +149,13 @@ namespace _Main.Scripts.Networking
                     m_playerDic[ownerId].PlayersObj.Remove(obj);
                     m_playerDic[ownerId].Model.RemoveObjectToOwnerList(obj.NetworkObjectId);
                     obj.Despawn();
-                    Debug.Log($"Despawn");
                     break;
                 }
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void RequestSpawnBulletServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos, ulong networkObjId)
+        public void RequestSpawnBulletServerRpc(ulong p_OwnerId, int spawnObjectId, Vector3 pos, ulong p_targetNetworkObjId)
         {
             var obj = Instantiate<NetworkObject>(SpawnableNetworkObjects[spawnObjectId]) ;
             obj.transform.position = pos;
@@ -176,29 +163,24 @@ namespace _Main.Scripts.Networking
 
             if (obj.TryGetComponent(out SpawnableNetworkObject spawnableNetworkObject))
             {
-                var p = new ClientRpcParams();
-                p.Send.TargetClientIds = new ulong[]{p_OwnerId,m_serverId};
-                spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId, p);
+                spawnableNetworkObject.SetOwnerIdClientRpc(p_OwnerId);
             }
-            //TODO: comprobar que haya una key en el diccionario para que haya un p_OwnerId
-            //TODO: Comprobar si el ownerID == serverID no agregarlo en el diccionario, sino en la lista de objetos del servidor "m_serverObj"
             
             m_playerDic[p_OwnerId].PlayersObj.Add(obj);
             m_playerDic[p_OwnerId].Model.AddObjectToOwnerList(obj.NetworkObjectId);
 
-            //TODO: Preguntarle a Seba como hacer esto mas performante
-            //No me gusta que cada vez que se spawnee una bala tenga que buscar en toda la lista de objetos
             if (obj.TryGetComponent(out BulletModel model))
             {
-                foreach (var networkObject in m_serverObj)
+                foreach (var enemy in m_serverObj)
                 {
-                    if(networkObject.NetworkObjectId != NetworkObjectId)
-                        return;
+                    if(enemy.NetworkObjectId != p_targetNetworkObjId)
+                        continue;
 
-                    var targetTrans = networkObject.transform;
+                    var targetTrans = enemy.transform;
+                    Debug.Log($"Bala Inicializada");
                     model.InitializeBullet(targetTrans);
+                    break;
                 }
-                
             }
         }
 
@@ -376,7 +358,6 @@ namespace _Main.Scripts.Networking
             [ServerRpc(RequireOwnership = false)]
             public void RequestActivateWaveServerRpc() 
             {
-                Debug.Log($"WaveeStart");
                 m_waveController.ActivateWave();
                 RequestUnableWaveButtonsClientRpc();
             }

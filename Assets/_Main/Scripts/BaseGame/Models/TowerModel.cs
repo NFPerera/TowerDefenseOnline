@@ -16,12 +16,6 @@ namespace _Main.Scripts.BaseGame.Models
         private List<EnemyModel> m_enemiesInRange = new List<EnemyModel>();
         private float m_timer;
 
-
-        private void Start()
-        {
-            Debug.Log($"My owner is; {MyOwnerId}");
-        }
-
         private void Update()
         {
             m_timer += Time.deltaTime;

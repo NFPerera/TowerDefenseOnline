@@ -1,6 +1,7 @@
 ﻿using _Main.Scripts.BaseGame._Managers;
 using _Main.Scripts.BaseGame.Commands;
 using _Main.Scripts.BaseGame.Models;
+using _Main.Scripts.Networking;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
@@ -11,7 +12,6 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
         public override void Attack(BulletModel model)
         {
             GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(),model.MyOwnerId, model.GetDamage()));
-            Destroy(model.gameObject);
         }
     }
 }

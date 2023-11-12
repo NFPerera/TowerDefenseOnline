@@ -10,6 +10,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
     public class BulletRocket : BulletAttack
     {
         [SerializeField] private float explosionRadius = 3f;
+        [SerializeField] private LayerMask enemiesMask;
         private Collider2D[] m_overlapArea = new Collider2D[64];
         
         public override void Attack(BulletModel model)
@@ -18,22 +19,21 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack
             {
                 GameManager.Instance.AddEventQueue(new CmdDoDamage(model.GetTargetID(), model.MyOwnerId,model.GetDamage()));
                 
-                Physics2D.OverlapCircleNonAlloc(model.transform.position, explosionRadius, m_overlapArea);
-                foreach (Collider2D collider in m_overlapArea)
+                var count = Physics2D.OverlapCircleNonAlloc(model.transform.position, explosionRadius, m_overlapArea);
+
+                for (int i = 0; i < count; i++)
                 {
-                    if(!collider.CompareTag("Enemies"))
-                        return;
+                    var collider = m_overlapArea[i];
+                    
+                    if(collider.gameObject.layer != enemiesMask)
+                        continue;
 
                     if (collider.TryGetComponent(out IDamageable damageable))
                     {
                         GameManager.Instance.AddEventQueue(new CmdDoDamage(damageable.GetObjId(),model.MyOwnerId, model.GetDamage()));
                     }
                 }
-            
-                Destroy(model.gameObject);
             }
-            else
-                Destroy(model.gameObject);
             
         }
     }

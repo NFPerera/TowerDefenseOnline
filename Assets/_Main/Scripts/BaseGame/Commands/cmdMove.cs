@@ -24,6 +24,7 @@ namespace _Main.Scripts.BaseGame.Commands
         public void Execute()
         {
             MasterManager.Instance.RequestMoveCommandServerRpc(m_ownerId,m_id, m_direction, m_speed);
+            
         }
         public void Undo()
         { 

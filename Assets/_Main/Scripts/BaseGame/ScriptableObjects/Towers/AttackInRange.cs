@@ -22,12 +22,10 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
             var firstEnemyInRange = m_totalEnemiesInRange[0];
             var data = model.GetData();
             
-            //var bullet = Instantiate(data.BulletPrefabs, model.GetShootPoint().position, Quaternion.identity);
             var bul = data.BulletPrefabs;
             
             MasterManager.Instance.RequestSpawnBulletServerRpc(model.MyOwnerId, bul.SpawnObjectId, 
                 model.GetShootPoint().position, firstEnemyInRange.NetworkObjectId);
-            //bullet.InitializeBullet(firstEnemyInRange.GetTransform(), data.Damage);
         }
 
 
@@ -38,7 +36,7 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
             Vector3 aimDirection= (enemyPosition - model.transform.position).normalized;
             float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
-            model.towerBody.transform.eulerAngles = new Vector3(0, 0, aimAngle);
+            model.towerBody.transform.eulerAngles = new Vector3(0, 0, aimAngle - 90f);
         }
     }
 }

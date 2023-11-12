@@ -11,7 +11,7 @@ namespace _Main.Scripts.Networking
         public ulong MyOwnerId { get; private set; }
         
         [ClientRpc]
-        public void SetOwnerIdClientRpc(ulong ownerId, ClientRpcParams p)
+        public void SetOwnerIdClientRpc(ulong ownerId)
         {
             MyOwnerId = ownerId;
         }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 356066475173132852}
   - component: {fileID: 5760762841581231088}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,9 +100,9 @@ GameObject:
   - component: {fileID: -5084878320386679632}
   - component: {fileID: 3631428925211852180}
   - component: {fileID: -3661482070663126293}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyTier (1)
-  m_TagString: Untagged
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

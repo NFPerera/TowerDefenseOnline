@@ -18,29 +18,34 @@ namespace _Main.Scripts.BaseGame.Models
         private Transform m_target;
         private IDamageable m_targetDamageable;
         private ulong m_targetDamageableId;
-        private CmdMove m_cmdMove;
         private bool m_reachTarget;
+        private bool m_isActive;
         private ulong m_objId;
 
+        private Vector3 m_dir;
         public BulletData GetData() => data;
         public void InitializeBullet(Transform target)
         {
             m_target = target;
             m_reachTarget = false;
+            m_isActive = true;
 
-
-            var dir = (m_target.position - transform.position).normalized;
+            m_dir = (m_target.position - transform.position).normalized;
             m_objId = NetworkObjectId;
-            m_cmdMove = new CmdMove(MyOwnerId,m_objId, dir,data.Speed);
         }
         private void Update()
         {
             if (!m_reachTarget && m_target != null)
             {
-                m_cmdMove.Execute();
+                transform.Translate(m_dir * (data.Speed * Time.deltaTime));
             }
-            else
+            else if (m_isActive)
+            {
                 MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, m_objId);
+                m_isActive = false;
+                gameObject.SetActive(false);
+            }
+            
         }
 
         private void OnTriggerEnter2D(Collider2D col)
