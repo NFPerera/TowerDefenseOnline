@@ -12,12 +12,13 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Towers
         {
             var enemiesInRange = model.GetEnemiesInRange();
             var data = model.GetData();
-            
+            model.PlayAttackParticleSystem();
             for (int i = 0; i < enemiesInRange.Count; i++)
             {
                 
                 GameManager.Instance.AddEventQueue(new CmdDoDamage(enemiesInRange[i].GetObjId(),model.MyOwnerId, data.Damage));
             }
+            
         }
     }
 }

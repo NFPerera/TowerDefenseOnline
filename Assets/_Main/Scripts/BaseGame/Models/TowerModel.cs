@@ -12,9 +12,11 @@ namespace _Main.Scripts.BaseGame.Models
     {
         [SerializeField] private TowerData data;
         [SerializeField] private Transform shootPoint;
+        [SerializeField] private ParticleSystem attackParticleSystem;
         public GameObject towerBody;
         private List<EnemyModel> m_enemiesInRange = new List<EnemyModel>();
         private float m_timer;
+        
 
         private void Update()
         {
@@ -45,6 +47,7 @@ namespace _Main.Scripts.BaseGame.Models
             m_enemiesInRange.Remove(damageable);
         }
 
+        public void PlayAttackParticleSystem() => attackParticleSystem.Play();
         #region Getters
             public TowerData GetData() => data;
             public List<EnemyModel> GetEnemiesInRange() => m_enemiesInRange;
