@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UI_box3(for-showing-wave-or-gears)_0: 8724385022080003258
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

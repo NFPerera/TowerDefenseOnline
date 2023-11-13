@@ -66,8 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a461ea54c79a4a6abb033b9412dc9d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MaxLifePoints>k__BackingField: 100
-  <StartMoneyPoints>k__BackingField: 100
   playerPrefab: {fileID: 4513759941475703775, guid: 2e3a06ce190d8f54d9155053a02bce9c, type: 3}
   SpawnableNetworkObjects:
   - {fileID: 3648190776440366776, guid: c1badabca6cdb614caa3b94e1e51546a, type: 3}
@@ -78,6 +76,10 @@ MonoBehaviour:
   - {fileID: -5084878320386679632, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
   - {fileID: 1077322556142082139, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
   - {fileID: 566671243589669157, guid: 89b23b0356eb57a409b2429d62d70550, type: 3}
+  networkObjects: []
+  <MaxLifePoints>k__BackingField: 100
+  victorySceneName: VictoryScene
+  defeatSceneName: DefeatScene
 --- !u!114 &2206813526094701113
 MonoBehaviour:
   m_ObjectHideFlags: 0

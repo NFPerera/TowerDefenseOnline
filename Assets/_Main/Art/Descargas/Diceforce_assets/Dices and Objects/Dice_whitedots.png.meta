@@ -466,7 +466,22 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Dice_whitedots_0: 2858463875779404184
+      Dice_whitedots_1: -1940295141875151999
+      Dice_whitedots_10: 480610750409901464
+      Dice_whitedots_11: 4056799908711917129
+      Dice_whitedots_12: -6884186418258927908
+      Dice_whitedots_13: -6080796480306029724
+      Dice_whitedots_14: -4913285821630497949
+      Dice_whitedots_2: 5296978436428111596
+      Dice_whitedots_3: 5695835628412831632
+      Dice_whitedots_4: 3239273000583268054
+      Dice_whitedots_5: -6437767264611422305
+      Dice_whitedots_6: 6747827134374180965
+      Dice_whitedots_7: -3168118829071875532
+      Dice_whitedots_8: -3260819920536352489
+      Dice_whitedots_9: 8339839999179309130
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -49,7 +49,7 @@ namespace _Main.Scripts.BaseGame.Models
                 
                 if (m_indexPathPoints >= m_pathPoints.Count)
                 {
-                    MasterManager.Instance.OnChangeLifePoints.Invoke(index+ 1);
+                    MasterManager.Instance.RequestLooseLifePointsServerRpc(index+ 1);
                     MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, NetworkObjectId);
                     return;
                 }

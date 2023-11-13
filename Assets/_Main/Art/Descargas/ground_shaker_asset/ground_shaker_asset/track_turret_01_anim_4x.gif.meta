@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      track_turret_01_anim_4x_0: 1534497308705747774
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

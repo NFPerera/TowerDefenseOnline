@@ -202,7 +202,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Gear_dropfromenemies_0: -560506966558933152
+      Gear_dropfromenemies_1: -1218180999498777145
+      Gear_dropfromenemies_2: 4891712497509714445
+      Gear_dropfromenemies_3: -936331298841852514
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

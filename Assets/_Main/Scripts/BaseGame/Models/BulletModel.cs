@@ -14,7 +14,7 @@ namespace _Main.Scripts.BaseGame.Models
     public class BulletModel : SpawnableNetworkObject, IBullet
     {
         [SerializeField] private BulletData data;
-
+        [SerializeField] private float lifeTime = 2f;
         private Transform m_target;
         private IDamageable m_targetDamageable;
         private ulong m_targetDamageableId;
@@ -23,18 +23,32 @@ namespace _Main.Scripts.BaseGame.Models
         private ulong m_objId;
 
         private Vector3 m_dir;
+        private float m_lifeTime;
         public BulletData GetData() => data;
         public void InitializeBullet(Transform target)
         {
             m_target = target;
             m_reachTarget = false;
             m_isActive = true;
-
+            m_lifeTime = Time.time + lifeTime;
+            
             m_dir = (m_target.position - transform.position).normalized;
             m_objId = NetworkObjectId;
         }
         private void Update()
         {
+            if (m_lifeTime < Time.time)
+            {
+                if (m_isActive)
+                {
+                    m_isActive = false;
+                    gameObject.SetActive(false);
+                    MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, m_objId);
+                }
+                else return;
+
+            }
+            
             if (!m_reachTarget && m_target != null)
             {
                 transform.Translate(m_dir * (data.Speed * Time.deltaTime));

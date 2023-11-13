@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      turret_02_mk1_0: -1662775268488600430
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

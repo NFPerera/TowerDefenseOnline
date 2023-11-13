@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using _Main.Scripts.BaseGame._Managers;
 using _Main.Scripts.BaseGame.Controllers;
@@ -48,7 +49,6 @@ namespace _Main.Scripts.Networking
             DontDestroyOnLoad(this.gameObject);
 
             m_lifePoints = MaxLifePoints;
-            OnChangeLifePoints += OnLooseLifePoints;
             networkObjects = SpawnableNetworkObjects;
         }
 
@@ -62,22 +62,7 @@ namespace _Main.Scripts.Networking
 
         public void ChangeNetScene(string pSceneName) => NetworkManager.Singleton.SceneManager.LoadScene(pSceneName, LoadSceneMode.Single);
 
-        [ServerRpc]
-        public void SetPlayersNameServerRpc(ulong id, string pName)
-        {
-            if (m_playerDic.ContainsKey(id))
-            {
-                m_playerDic[id].PlayersName = pName;
-            }
-            else
-            {
-                m_playerDic[id] = new PlayerData();
-                m_playerDic[id].PlayersName = pName;
-                m_playerDic[id].Model?.SetPlayersName(pName);
-            }
-        }
 
-        //Esto deberia llamarse en el awake del model
         [ServerRpc(RequireOwnership = false)]
         public void RequestSpawnPlayerDicServerRpc(ulong id)
         {
@@ -128,13 +113,16 @@ namespace _Main.Scripts.Networking
         {
             if (ownerId == m_serverId)
             {
-                foreach (NetworkObject networkObject in m_serverObj)
+                for (int i = 0; i < m_serverObj.Count; i++)
                 {
+                    var networkObject = m_serverObj[i];
+                    
                     if(networkObject.NetworkObjectId != networkObjId)
                         continue;
-                    
-                    Debug.Log($"Server Despawn");
+
                     networkObject.Despawn();
+                    m_serverObj.Remove(networkObject);
+                    
                 }
                 return;
             }
@@ -177,65 +165,53 @@ namespace _Main.Scripts.Networking
                         continue;
 
                     var targetTrans = enemy.transform;
-                    Debug.Log($"Bala Inicializada");
                     model.InitializeBullet(targetTrans);
                     break;
                 }
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void RequestMoveCommandServerRpc(ulong p_ownerId, ulong p_objId, Vector3 p_dir, float p_speed)
-        {
-            var data = m_playerDic[p_ownerId];
-            if (data.Model.TryGetOwnedObject(p_objId, out var networkObjectId))
-            {
-                NetworkObject networkObj = default; 
-                foreach (var obj in data.PlayersObj)
-                {
-                    if (obj.NetworkObjectId == networkObjectId)
-                        networkObj = obj;
-                }
 
-                if (networkObj == null) 
-                    return;
-                    
-                    
-                networkObj.transform.position += p_dir * (p_speed * Time.deltaTime);
-                Debug.Log($"SE MUEEVE EN EL SERVER");
-                UpdateObjPosClientRpc(p_ownerId, p_objId, networkObj.transform.position);
+        [ServerRpc(RequireOwnership = false)]
+        public void RequestDisconnectUserServerRpc(ulong id)
+        {
+            if (id == NetworkManager.Singleton.LocalClientId)
+            {
+                NetworkManager.Singleton.Shutdown();
             }
+            else
+            {
+                Destroy(m_playerDic[id].Model);
+                m_playerDic.Remove(id);
+                NetworkManager.Singleton.DisconnectClient(id);
+            }
+            
             
         }
 
-        [ClientRpc]
-        private void UpdateObjPosClientRpc(ulong p_ownerId, ulong p_objId, Vector3 p_newPos)
-        {
-            var data = m_playerDic[p_ownerId];
-            if (data.Model.TryGetOwnedObject(p_objId, out var networkObjectId))
-            {
-                NetworkObject networkObj = default; 
-                foreach (var obj in data.PlayersObj)
-                {
-                    if (obj.NetworkObjectId == networkObjectId)
-                        networkObj = obj;
-                }
-
-                if (networkObj == null) 
-                    return;
-                    
-                    
-                networkObj.transform.position = p_newPos;
-                Debug.Log($"SE MUEEVE EN EL CLIEENTEE");
-                
-            }
-        }
+        
         
         [ServerRpc(RequireOwnership = false)]
         public void RequestDoDamageServerRpc(ulong objId, ulong attacker,int damage)
         {
-            foreach (var obj in m_serverObj)
+            // foreach (var obj in m_serverObj)
+            // {
+            //     if(obj == default)
+            //         continue;
+            //     
+            //     if(obj.NetworkObjectId != objId)
+            //         continue;
+            //     
+            //     if (obj.TryGetComponent(out IDamageable damageable))
+            //     {
+            //         damageable.DoDamage(attacker, damage);
+            //     }
+            // }
+
+            for (int i = 0; i < m_serverObj.Count; i++)
             {
+                var obj = m_serverObj[i];
+                
                 if(obj == default)
                     continue;
                 
@@ -336,24 +312,19 @@ namespace _Main.Scripts.Networking
        
         
             [field: SerializeField] public int MaxLifePoints { get; private set; }
+            [SerializeField] private String victorySceneName;
+            [SerializeField] private String defeatSceneName;
             
             private int m_lifePoints;
             
             private WaveController m_waveController;
-            // private ChatManager m_chat;
-            // public ChatManager GetChatManager() => m_chat;
             
-            public Action<int> OnChangeLifePoints;
+            //public Action<int> OnChangeLifePoints;
             public void SetWaveController(WaveController waveController)
             {
                 m_waveController = waveController;
                 m_waveController.OnFinishWave += RequestEnableWaveButtonsClientRpc;
             }
-            
-            // public void SetChatManager(ChatManager chatManager)
-            // {
-            //     m_chat = chatManager;
-            // }
             
             [ServerRpc(RequireOwnership = false)]
             public void RequestActivateWaveServerRpc() 
@@ -385,13 +356,33 @@ namespace _Main.Scripts.Networking
                 m_playerDic[affectedPlayer].Model.RequestChangeMoneyClientRpc(diff,p);
             }
             
-            private void OnLooseLifePoints(int lifeChange)
+            [ServerRpc(RequireOwnership = false)]
+            public void RequestLooseLifePointsServerRpc(int lifeChange)
             {
                 m_lifePoints -= lifeChange;
-
-                if (m_lifePoints <= 0) LoseGame();
+                LooseLifePointsClientRpc(lifeChange);
+                
+                if (m_lifePoints <= 0)
+                    NetworkManager.Singleton.SceneManager.LoadScene(defeatSceneName, LoadSceneMode.Single);
             }
 
+            public Action<int> OnChangeLifePoints;
+
+            [ClientRpc]
+            private void LooseLifePointsClientRpc(int lifeChange)
+            {
+                if(IsServer)
+                    return;
+                
+                m_lifePoints -= lifeChange;
+                OnChangeLifePoints.Invoke(m_lifePoints);
+            }
+
+            [ServerRpc]
+            public void RequestLoadWinSceneServerRpc()
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene(victorySceneName, LoadSceneMode.Single);
+            }
             [ServerRpc(RequireOwnership = false)]
             public void RequestBuyTowerServerRpc(ulong buyerId,int towerId, int towerCost)
             {
@@ -406,11 +397,6 @@ namespace _Main.Scripts.Networking
             public int GetLifePoints() => m_lifePoints;
             
             
-            
-            private void LoseGame()
-            {
-                //TODO; Cambiar la escena
-            }
 
             #endregion
     }

@@ -178,7 +178,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Bullet_anticipation_0: -8060776661643439673
+      Bullet_anticipation_1: 925863377220141101
+      Bullet_anticipation_2: 949220798249900728
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -65,7 +65,8 @@ namespace _Main.Scripts.BaseGame.Controllers
             }
             else
             {
-                m_ui.ActivateGameOverScreen(true);
+                MasterManager.Instance.RequestLoadWinSceneServerRpc();
+                gameObject.SetActive(false);
             }
         }
 
@@ -98,7 +99,7 @@ namespace _Main.Scripts.BaseGame.Controllers
             if (m_timer <= 0)
             {
                 Random rnd = new Random();
-                var aux = rnd.Next(0, 4);
+                var aux = rnd.Next(0, 3);
                 
                 GameManager.Instance.AddEventQueue(new CmdSpawn(waves[m_nextWave].enemies[aux],m_serverId, m_spawnPoint));
                 m_timer = waves[m_nextWave].countDownBetweenEnemies;

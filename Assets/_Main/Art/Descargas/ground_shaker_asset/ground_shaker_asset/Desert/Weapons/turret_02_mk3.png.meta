@@ -370,7 +370,18 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      turret_02_mk3_0: -8041954644480148881
+      turret_02_mk3_1: 2655152963152180955
+      turret_02_mk3_10: 4463408740571974766
+      turret_02_mk3_2: -556034133473481305
+      turret_02_mk3_3: -5869465608923329712
+      turret_02_mk3_4: 6299909971294307238
+      turret_02_mk3_5: -3529001596265673545
+      turret_02_mk3_6: 9078553747449672739
+      turret_02_mk3_7: 5629882763359147221
+      turret_02_mk3_8: -94759760528977086
+      turret_02_mk3_9: -4723999457339851250
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

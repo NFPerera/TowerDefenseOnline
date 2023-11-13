@@ -49,34 +49,33 @@ MonoBehaviour:
   - enemies:
     - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
     numberOfEnemies: 10
-    countDownBetweenEnemies: 1
+    countDownBetweenEnemies: 0.2
   - enemies:
     - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
     numberOfEnemies: 20
-    countDownBetweenEnemies: 1
+    countDownBetweenEnemies: 0.2
   - enemies:
     - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
     - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
     numberOfEnemies: 50
-    countDownBetweenEnemies: 2
+    countDownBetweenEnemies: 0.5
   - enemies:
     - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
     - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
     numberOfEnemies: 80
-    countDownBetweenEnemies: 1
+    countDownBetweenEnemies: 0.5
   - enemies:
     - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
     - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
     - {fileID: 2192483259105855234, guid: 89b23b0356eb57a409b2429d62d70550, type: 3}
     numberOfEnemies: 100
-    countDownBetweenEnemies: 2
+    countDownBetweenEnemies: 0.1
   - enemies:
     - {fileID: 8380587084034564154, guid: 5cbe5ed497ed50b4587e6817c7838a66, type: 3}
     - {fileID: 4163566138633688901, guid: 48160e7f0a5fb9442969aecf6046e6df, type: 3}
     - {fileID: 2192483259105855234, guid: 89b23b0356eb57a409b2429d62d70550, type: 3}
     numberOfEnemies: 150
-    countDownBetweenEnemies: 2
-  spawnPoint: {fileID: 0}
+    countDownBetweenEnemies: 0.8
 --- !u!114 &7445538526466242408
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MaxHealth>k__BackingField: 1
   <Speed>k__BackingField: 5
-  <Sprite>k__BackingField: {fileID: 5046935405244937975, guid: 40d7a54c070281e40a37533120f85c45, type: 3}
+  <Sprite>k__BackingField: {fileID: 6744410300872726914, guid: 002307bd591660940bd9c0eb9c313161, type: 3}

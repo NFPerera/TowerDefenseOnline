@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      towers_walls_grass_light_1_0: -8449012356666253523
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

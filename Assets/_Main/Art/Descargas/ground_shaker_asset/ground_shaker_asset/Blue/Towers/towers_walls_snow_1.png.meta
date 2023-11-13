@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      towers_walls_snow_1_0: 7977835555949461009
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

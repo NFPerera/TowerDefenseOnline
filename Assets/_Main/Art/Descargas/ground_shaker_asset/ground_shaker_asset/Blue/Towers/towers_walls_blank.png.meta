@@ -370,7 +370,18 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      towers_walls_blank_0: -1813402968832775057
+      towers_walls_blank_1: -4639784940070286170
+      towers_walls_blank_10: 8128786181223191115
+      towers_walls_blank_2: -2452352930915002423
+      towers_walls_blank_3: -1688985468373051500
+      towers_walls_blank_4: 539254303123245711
+      towers_walls_blank_5: 2313902123885010996
+      towers_walls_blank_6: -9095195948161790216
+      towers_walls_blank_7: -8047149717153577819
+      towers_walls_blank_8: 5049105659903942006
+      towers_walls_blank_9: 6744410300872726914
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

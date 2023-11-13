@@ -466,7 +466,22 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Dice_bluedots_0: 2418211001682191095
+      Dice_bluedots_1: -2218091096030718944
+      Dice_bluedots_10: -1639474983423025698
+      Dice_bluedots_11: 6267352876995113485
+      Dice_bluedots_12: 667861875984999313
+      Dice_bluedots_13: 4317558089729539111
+      Dice_bluedots_14: -1355671420416112832
+      Dice_bluedots_2: -7846655559446653529
+      Dice_bluedots_3: 7108949281680572407
+      Dice_bluedots_4: -2370435273986407747
+      Dice_bluedots_5: -3497265037177696289
+      Dice_bluedots_6: 239496480609016302
+      Dice_bluedots_7: 525409405012091136
+      Dice_bluedots_8: 9027711913417506660
+      Dice_bluedots_9: 2658622103824257107
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

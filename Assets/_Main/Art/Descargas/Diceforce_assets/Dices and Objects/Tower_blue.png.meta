@@ -274,7 +274,14 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Tower_blue_0: 7084944380439337423
+      Tower_blue_1: -8950311580405797485
+      Tower_blue_2: 1738717880713243727
+      Tower_blue_3: -240550010870000024
+      Tower_blue_4: -1877832690083378636
+      Tower_blue_5: -8933873262705075288
+      Tower_blue_6: -6250878865246529548
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,5 +1,4 @@
 ﻿using _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Attack;
-using _Main.Scripts.BaseGame.ScriptableObjects.Bullets.Movement;
 using UnityEngine;
 
 namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets
@@ -10,6 +9,5 @@ namespace _Main.Scripts.BaseGame.ScriptableObjects.Bullets
         [field: SerializeField] public float Speed { get; private set; }
         [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public BulletAttack BulletAttack { get; private set; }
-        [field: SerializeField] public BulletMovement BulletMovement { get; private set; }
     }
 }
