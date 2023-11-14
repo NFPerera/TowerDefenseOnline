@@ -22,6 +22,7 @@ namespace _Main.Scripts.BaseGame.Models
         private bool m_isAlive;
         private void Awake()
         {
+            //Si pongo if(!IsServer) return; se rompe y no se hace
             foreach (var trans in GameManager.Instance.PathPoints)
             {
                 m_pathPoints.Add(trans.position);
@@ -36,6 +37,11 @@ namespace _Main.Scripts.BaseGame.Models
 
         private void Update()
         {
+            Debug.Log(!IsServer);
+            
+            if(!IsServer)
+                return;
+            
             if(!m_isAlive)
                 return;
             
@@ -49,8 +55,9 @@ namespace _Main.Scripts.BaseGame.Models
                 
                 if (m_indexPathPoints >= m_pathPoints.Count)
                 {
-                    MasterManager.Instance.RequestLooseLifePointsServerRpc(index+ 1);
-                    MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, NetworkObjectId);
+                    //TODO : Cambiar los RPC por void normales
+                    MasterManager.Instance.RequestLooseLifePoints(index+ 1);
+                    MasterManager.Instance.RequestDespawnGameObject(MyOwnerId, NetworkObjectId);
                     return;
                 }
                 dir = (m_pathPoints[m_indexPathPoints] - position).normalized;
@@ -90,6 +97,7 @@ namespace _Main.Scripts.BaseGame.Models
                 OnDie(attackerId);
                 return;
             }
+            //TODO : Cambiar los RPC por void normales
             MasterManager.Instance.RequestChangeMoneyServerRpc(attackerId, 5);
             ChangeStats();
         }
@@ -103,8 +111,9 @@ namespace _Main.Scripts.BaseGame.Models
         private void OnDie(ulong attackerId)
         {
             m_isAlive = false;
+            //TODO : Cambiar los RPC por void normales
             MasterManager.Instance.RequestChangeMoneyServerRpc(attackerId, 5);
-            MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, NetworkObjectId);
+            MasterManager.Instance.RequestDespawnGameObject(MyOwnerId, NetworkObjectId);
         }
 
 

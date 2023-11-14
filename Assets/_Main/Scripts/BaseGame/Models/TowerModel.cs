@@ -16,10 +16,18 @@ namespace _Main.Scripts.BaseGame.Models
         public GameObject towerBody;
         private List<EnemyModel> m_enemiesInRange = new List<EnemyModel>();
         private float m_timer;
-        
+
+        private void Awake()
+        {
+            
+                
+        }
 
         private void Update()
         {
+            if(!IsServer)
+                return;
+            
             m_timer += Time.deltaTime;
             
             if(m_enemiesInRange.Count <= 0f)
@@ -36,12 +44,16 @@ namespace _Main.Scripts.BaseGame.Models
         
         private void OnTriggerEnter2D(Collider2D col)
         {
+            if(!IsServer)
+                return;
             if (!col.TryGetComponent(out EnemyModel damageable)) return;
             
             m_enemiesInRange.Add(damageable);
         }
         private void OnTriggerExit2D(Collider2D other)
         {
+            if(!IsServer)
+                return;
             if (!other.TryGetComponent(out EnemyModel damageable)) return;
             
             m_enemiesInRange.Remove(damageable);

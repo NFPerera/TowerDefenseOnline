@@ -108,8 +108,7 @@ namespace _Main.Scripts.Networking
             }
         }
         
-        [ServerRpc(RequireOwnership = false)]
-        public void RequestDespawnGameObjectServerRpc(ulong ownerId,ulong networkObjId)
+        public void RequestDespawnGameObject(ulong ownerId,ulong networkObjId)
         {
             if (ownerId == m_serverId)
             {
@@ -194,20 +193,6 @@ namespace _Main.Scripts.Networking
         [ServerRpc(RequireOwnership = false)]
         public void RequestDoDamageServerRpc(ulong objId, ulong attacker,int damage)
         {
-            // foreach (var obj in m_serverObj)
-            // {
-            //     if(obj == default)
-            //         continue;
-            //     
-            //     if(obj.NetworkObjectId != objId)
-            //         continue;
-            //     
-            //     if (obj.TryGetComponent(out IDamageable damageable))
-            //     {
-            //         damageable.DoDamage(attacker, damage);
-            //     }
-            // }
-
             for (int i = 0; i < m_serverObj.Count; i++)
             {
                 var obj = m_serverObj[i];
@@ -356,8 +341,7 @@ namespace _Main.Scripts.Networking
                 m_playerDic[affectedPlayer].Model.RequestChangeMoneyClientRpc(diff,p);
             }
             
-            [ServerRpc(RequireOwnership = false)]
-            public void RequestLooseLifePointsServerRpc(int lifeChange)
+            public void RequestLooseLifePoints(int lifeChange)
             {
                 m_lifePoints -= lifeChange;
                 LooseLifePointsClientRpc(lifeChange);

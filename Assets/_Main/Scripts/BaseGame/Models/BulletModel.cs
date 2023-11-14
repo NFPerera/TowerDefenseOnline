@@ -37,13 +37,16 @@ namespace _Main.Scripts.BaseGame.Models
         }
         private void Update()
         {
+            if(!IsServer)
+                return;
+            
             if (m_lifeTime < Time.time)
             {
                 if (m_isActive)
                 {
                     m_isActive = false;
                     gameObject.SetActive(false);
-                    MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, m_objId);
+                    MasterManager.Instance.RequestDespawnGameObject(MyOwnerId, m_objId);
                 }
                 else return;
 
@@ -55,7 +58,7 @@ namespace _Main.Scripts.BaseGame.Models
             }
             else if (m_isActive)
             {
-                MasterManager.Instance.RequestDespawnGameObjectServerRpc(MyOwnerId, m_objId);
+                MasterManager.Instance.RequestDespawnGameObject(MyOwnerId, m_objId);
                 m_isActive = false;
                 gameObject.SetActive(false);
             }
